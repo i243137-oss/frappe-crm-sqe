@@ -26,9 +26,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .container { max-width: 900px; margin: 0 auto; background: #ffffff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     h1, h2 { margin-top: 0; }
     .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: 500; cursor: pointer; }
-    .btn-primary { background: #2563eb; color: #ffffff; }
-    .btn-success { background: #16a34a; color: #ffffff; }
-    .btn-danger { background: #dc2626; color: #ffffff; }
+    .btn-primary { background: #1d4ed8; color: #ffffff; }
+    .btn-success { background: #15803d; color: #ffffff; }
+    .btn-danger { background: #b91c1c; color: #ffffff; }
     .btn-secondary { background: #e2e8f0; color: #334155; }
     .form-group { margin-bottom: 16px; }
     label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
@@ -37,8 +37,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .modal-content { background: #ffffff; padding: 24px; border-radius: 8px; width: 440px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     .modal.open { display: flex; }
     .toast { display: none; position: fixed; bottom: 20px; right: 20px; padding: 12px 24px; border-radius: 6px; background: #1e293b; color: white; }
-    .toast.error { background: #dc2626; }
-    .toast.success { background: #16a34a; }
+    .toast.error { background: #b91c1c; }
+    .toast.success { background: #15803d; }
     .status-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
     .status-lead { background: #e0f2fe; color: #0369a1; }
     .status-won { background: #dcfce7; color: #15803d; }
@@ -46,7 +46,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </style>
 </head>
 <body>
-  <div class="container" id="app">
+  <main class="container" id="app">
     <div id="lead-view">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
         <div>
@@ -138,8 +138,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
     </div>
 
-    <div id="toast" class="toast"></div>
-  </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
 
   <script>
     function showToast(msg, isError = false) {

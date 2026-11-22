@@ -51,6 +51,10 @@ jobs:
         run: |
           pytest tests/team/e2e/test_crm_use_cases_playwright.py -v
 
+      - name: Run Accessibility (a11y) & Usability WCAG Audit
+        run: |
+          pytest tests/team/a11y/ -v
+
       - name: Execute Mutation Quality Gate
         run: |
           python tests/team/mutation/mutation_runner.py
