@@ -15,6 +15,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Clone Upstream CRM Codebase
+        run: |
+          git clone --depth 50 https://github.com/frappe/crm crm
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
