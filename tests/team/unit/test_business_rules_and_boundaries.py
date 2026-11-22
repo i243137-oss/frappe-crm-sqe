@@ -24,21 +24,19 @@ CURRENCY_FIELDS = ["deal_value", "expected_deal_value", "annual_revenue", "total
 @pytest.mark.parametrize("fieldname", CURRENCY_FIELDS)
 def test_br01_three_point_bva_currency_fields(clean_db, fieldname):
     """TC-UNIT-BR1-BVA: Evaluates below boundary (-0.01), at boundary (0.00), and above boundary (+0.01)."""
-    # 1. Below boundary: -0.01 -> rejected
+    # 1. Below boundary: -0.01 -> rejected via validate()
     negative_deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", fieldname: -0.01})
-    # Frappe validates non-negative on currency fields
-    if negative_deal.get(fieldname) < 0:
-        with pytest.raises(frappe.NonNegativeError):
-            frappe.throw(f"{fieldname} cannot be negative", frappe.NonNegativeError)
+    with pytest.raises(frappe.NonNegativeError):
+        negative_deal.validate()
 
     # 2. Exactly at boundary: 0.00 -> accepted
     boundary_deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", fieldname: 0.00})
-    boundary_deal.validate_lost_reason()
+    boundary_deal.validate()
     assert boundary_deal.get(fieldname) == 0.00
 
     # 3. Above boundary: +0.01 -> accepted
     above_deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", fieldname: 0.01})
-    above_deal.validate_lost_reason()
+    above_deal.validate()
     assert above_deal.get(fieldname) == 0.01
 
 
