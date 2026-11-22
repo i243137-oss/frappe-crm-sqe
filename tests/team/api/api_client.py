@@ -99,8 +99,8 @@ class FrappeAPIClient:
             if not lead_name or not mock_db.exists("CRM Lead", lead_name):
                 return APIResponse(404, {"exc_type": "DoesNotExistError", "message": f"Lead {lead_name} not found"})
 
-            # Currency boundary validation on optional deal payload
-            deal_payload = data.get("deal") or {}
+            # Currency boundary validation on optional deal payload or top-level params
+            deal_payload = data.get("deal") if isinstance(data.get("deal"), dict) else data
             for field in ("deal_value", "expected_deal_value", "annual_revenue", "total", "net_total"):
                 if field in deal_payload and deal_payload[field] is not None and deal_payload[field] < 0:
                     return APIResponse(400, {"exc_type": "NonNegativeError", "message": f"{field} cannot be negative"})
