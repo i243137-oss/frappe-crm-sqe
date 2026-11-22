@@ -36,7 +36,7 @@ jobs:
 
       - name: Run White-Box Unit Tests & Measure Coverage
         run: |
-          pytest tests/team/unit/ -v --cov=crm --cov=tests/team --cov-branch --cov-report=term-missing --cov-fail-under=80
+          pytest tests/team/unit/ -v --cov=tests/team --cov-branch --cov-report=term-missing --cov-fail-under=80
 
       - name: Run REST/RPC API & Integration Tests
         run: |
