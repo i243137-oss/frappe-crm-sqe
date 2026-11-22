@@ -14,7 +14,7 @@ import time
 import socketserver
 import pytest
 from playwright.sync_api import sync_playwright, expect
-from tests.team.e2e.mock_server import MockCRMHandler, PORT
+from tests.team.e2e.mock_server import MockCRMHandler, ReusableTCPServer, PORT
 
 SERVER_URL = f"http://127.0.0.1:{PORT}"
 
@@ -22,12 +22,13 @@ SERVER_URL = f"http://127.0.0.1:{PORT}"
 @pytest.fixture(scope="module")
 def live_server():
     """Starts the static E2E application server in a background thread."""
-    server = socketserver.TCPServer(("127.0.0.1", PORT), MockCRMHandler)
+    server = ReusableTCPServer(("127.0.0.1", PORT), MockCRMHandler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     time.sleep(0.5)
     yield SERVER_URL
     server.shutdown()
+    server.server_close()
 
 
 @pytest.fixture(scope="module")
