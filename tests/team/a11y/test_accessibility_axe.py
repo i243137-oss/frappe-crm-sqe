@@ -21,19 +21,21 @@ import socketserver
 import pytest
 from playwright.sync_api import sync_playwright
 from axe_playwright_python.sync_playwright import Axe
-from tests.team.e2e.mock_server import MockCRMHandler, PORT
+from tests.team.e2e.mock_server import MockCRMHandler, ReusableTCPServer
 
-SERVER_URL = f"http://127.0.0.1:{PORT}"
+A11Y_PORT = 9125
+SERVER_URL = f"http://127.0.0.1:{A11Y_PORT}"
 
 
 @pytest.fixture(scope="module")
 def live_server():
-    server = socketserver.TCPServer(("127.0.0.1", PORT), MockCRMHandler)
+    server = ReusableTCPServer(("127.0.0.1", A11Y_PORT), MockCRMHandler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     time.sleep(0.5)
     yield SERVER_URL
     server.shutdown()
+    server.server_close()
 
 
 @pytest.fixture(scope="module")

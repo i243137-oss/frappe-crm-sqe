@@ -232,6 +232,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
+
 class MockCRMHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/" or self.path.startswith("/crm"):
