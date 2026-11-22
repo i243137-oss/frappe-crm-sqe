@@ -1,0 +1,19 @@
+*.pdf
+instructions.md
+
+# Upstream repository
+crm/
+
+# Python cache & test artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node & Playwright
+node_modules/
+test-results/
+playwright-report/
+blob-report/
