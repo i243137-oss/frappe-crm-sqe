@@ -16,7 +16,7 @@
 | **API & Integration Testing** | Completed | 24 API tests covering `POST /api/method/...convert_to_deal`, `PUT /api/resource/CRM Deal/{name}`, `GET` endpoints, RPC `set_value`, 3-point BVA, EP, RBAC checks, and cross-workflow pipeline (`docs/API_TEST_REPORT.md`). |
 | **OpenAPI Test Data Generator** | Completed | OpenAPI 3.0 specification (`docs/openapi_crm.yaml`), automated BVA/EP generator (`tests/team/generator/data_generator.py`), synthetic test bank (`tests/team/data/generated_api_payloads.json`), and validator suite (`docs/DATA_GENERATOR_REPORT.md`). |
 | **Playwright Use Case Automation** | Completed | Headless Chromium browser automation covering happy path (Lead -> Deal -> Won), 2 alternative flows (predefined reason & Other with notes), 2 exception flows (Lost lead rejection & missing reason/notes rejection), and keyboard Escape dismissal (`docs/E2E_USE_CASE_REPORT.md`). |
-| **Mutation Testing & CI Quality Gates** | Pending | Target: Mutation score measurement, killing mutants, and GitHub Actions quality gate. |
+| **Mutation Testing & CI Quality Gates** | Completed | 16/16 AST business rule mutants killed (100.0% mutation score), targeted mutation engine (`tests/team/mutation/mutation_runner.py`), mutation analysis report (`docs/MUTATION_REPORT.md`), and GitHub Actions CI workflow (`.github/workflows/sqe_quality_gate.yml`). |
 | **Static Analysis & Cyclomatic Complexity** | Pending | Target: SonarQube analysis and manual CFG complexity calculation. |
 | **Usability & Accessibility Audits** | Pending | Target: axe-core and Lighthouse automated audits with before-and-after reports. |
 | **Defensive Security Assessment** | Pending | Target: RBAC enforcement validation, session cookie inspection, and dependency audit. |

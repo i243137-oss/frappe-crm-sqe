@@ -1,0 +1,53 @@
+name: SQE Continuous Integration Quality Gate
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  sqe-verification:
+    name: Run SQE Test Suite & Quality Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install System & Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov playwright pytest-playwright pyyaml mutmut
+          playwright install --with-deps chromium
+
+      - name: Run Smoke Verification
+        run: |
+          pytest tests/team/unit/test_infrastructure_smoke.py -v
+
+      - name: Run White-Box Unit Tests & Measure Coverage
+        run: |
+          pytest tests/team/unit/ -v --cov=crm --cov=tests/team --cov-branch --cov-report=term-missing --cov-fail-under=80
+
+      - name: Run REST/RPC API & Integration Tests
+        run: |
+          pytest tests/team/api/ -v
+
+      - name: Run OpenAPI Test Data Generator Suite
+        run: |
+          python tests/team/generator/data_generator.py
+          pytest tests/team/generator/ -v
+
+      - name: Run Playwright E2E Browser Use Case Tests
+        run: |
+          pytest tests/team/e2e/test_crm_use_cases_playwright.py -v
+
+      - name: Execute Mutation Quality Gate
+        run: |
+          python tests/team/mutation/mutation_runner.py
