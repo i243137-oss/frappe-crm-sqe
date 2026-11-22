@@ -20,6 +20,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Frappe CRM Lead and Deal Management Workspace for Enterprise Sales">
   <title>Frappe CRM E2E Workspace</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; background: #f8fafc; color: #1e293b; }
@@ -237,6 +239,16 @@ class MockCRMHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
             self.wfile.write(HTML_TEMPLATE.encode("utf-8"))
+        elif self.path == "/deal":
+            deal_html = HTML_TEMPLATE.replace(
+                '<div id="lead-view">', '<div id="lead-view" style="display: none;">'
+            ).replace(
+                '<div id="deal-view" style="display: none;">', '<div id="deal-view" style="display: block;">'
+            )
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(deal_html.encode("utf-8"))
         elif self.path == "/health":
             self.send_response(200)
             self.send_header("Content-Type", "application/json")

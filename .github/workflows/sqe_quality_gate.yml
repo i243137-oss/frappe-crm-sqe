@@ -38,9 +38,13 @@ jobs:
         run: |
           pytest tests/team/unit/ -v --cov=tests/team/unit --cov=tests/team/fixtures --cov-branch --cov-report=term-missing --cov-fail-under=80
 
-      - name: Run REST/RPC API & Integration Tests
+      - name: Run REST & RPC API Tests
         run: |
-          pytest tests/team/api/ -v
+          pytest tests/team/api/test_lead_conversion_api.py tests/team/api/test_deal_status_api.py tests/team/api/test_api_bva_and_ep.py -v
+
+      - name: Run Cross-Workflow Integration Tests
+        run: |
+          pytest tests/team/api/test_cross_workflow_integration_api.py -v
 
       - name: Run OpenAPI Test Data Generator Suite
         run: |
@@ -58,3 +62,8 @@ jobs:
       - name: Execute Mutation Quality Gate
         run: |
           python tests/team/mutation/mutation_runner.py
+
+      - name: Run Static Code Quality & Complexity Gate
+        run: |
+          radon cc tests/team crm_deal crm_lead -a -nc --max B
+          flake8 tests/team --count --select=E9,F63,F7,F82 --show-source --statistics
