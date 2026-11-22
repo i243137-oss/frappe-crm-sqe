@@ -15,6 +15,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Clone Upstream CRM Codebase
+        run: |
+          git clone --depth 50 https://github.com/frappe/crm crm
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -32,7 +36,7 @@ jobs:
 
       - name: Run White-Box Unit Tests & Measure Coverage
         run: |
-          pytest tests/team/unit/ -v --cov=crm --cov=tests/team --cov-branch --cov-report=term-missing --cov-fail-under=80
+          pytest tests/team/unit/ -v --cov=tests/team/unit --cov=tests/team/fixtures --cov-branch --cov-report=term-missing --cov-fail-under=80
 
       - name: Run REST/RPC API & Integration Tests
         run: |
