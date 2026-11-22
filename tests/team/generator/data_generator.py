@@ -272,8 +272,22 @@ class OpenAPIDataGenerator:
         ]
         return payloads
 
+    def _get_schema_property(self, schema_name: str, property_name: str) -> Dict[str, Any]:
+        """Extracts field properties and constraints dynamically from OpenAPI schema."""
+        schemas = self.spec.get("components", {}).get("schemas", {})
+        schema = schemas.get(schema_name, {})
+        props = schema.get("properties", {})
+        return props.get(property_name, {})
+
     def generate_all(self, output_file: str = "tests/team/data/generated_api_payloads.json") -> Dict[str, Any]:
-        """Orchestrates generation of all datasets and saves to JSON."""
+        """Orchestrates generation of all datasets dynamically extracted from OpenAPI spec and saves to JSON."""
+        deal_props = self._get_schema_property("CRMDealInput", "deal_value")
+        prob_props = self._get_schema_property("CRMDealInput", "probability")
+
+        deal_min = float(deal_props.get("minimum", 0.0))
+        prob_min = float(prob_props.get("minimum", 0.0))
+        prob_max = float(prob_props.get("maximum", 100.0)) if "maximum" in prob_props else None
+
         dataset = {
             "metadata": {
                 "specification": self.spec_path,
@@ -281,14 +295,16 @@ class OpenAPIDataGenerator:
                 "version": "2.0.0",
                 "standards": ["OpenAPI 3.0", "3-Point BVA", "Equivalence Partitioning", "Combinatorial"]
             },
-            "bva_currency": self.generate_bva_for_number("deal_value", min_val=0.0, epsilon=0.01),
-            "bva_probability": self.generate_bva_for_number("probability", min_val=0.0, max_val=100.0, epsilon=0.1),
+            "bva_currency": self.generate_bva_for_number("deal_value", min_val=deal_min, epsilon=0.01),
+            "bva_probability": self.generate_bva_for_number("probability", min_val=prob_min, max_val=prob_max, epsilon=0.1),
             "ep_currency": self.generate_equivalence_partitions_for_currency("deal_value"),
             "lead_conversion_cases": self.generate_lead_conversion_payloads(),
             "deal_status_cases": self.generate_deal_status_payloads()
         }
 
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        out_dir = os.path.dirname(output_file)
+        if out_dir:
+            os.makedirs(out_dir, exist_ok=True)
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(dataset, f, indent=2)
 
