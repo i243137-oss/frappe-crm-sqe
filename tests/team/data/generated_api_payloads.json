@@ -1,0 +1,239 @@
+{
+  "metadata": {
+    "specification": "docs/openapi_crm.yaml",
+    "generator": "OpenAPIDataGenerator",
+    "version": "2.0.0",
+    "standards": [
+      "OpenAPI 3.0",
+      "3-Point BVA",
+      "Equivalence Partitioning",
+      "Combinatorial"
+    ]
+  },
+  "bva_currency": [
+    {
+      "field": "deal_value",
+      "test_type": "BVA_MIN_BELOW",
+      "value": -0.01,
+      "expected_valid": false,
+      "description": "deal_value just below minimum boundary (-0.01)"
+    },
+    {
+      "field": "deal_value",
+      "test_type": "BVA_MIN_EXACT",
+      "value": 0.0,
+      "expected_valid": true,
+      "description": "deal_value exact minimum boundary (0.0)"
+    },
+    {
+      "field": "deal_value",
+      "test_type": "BVA_MIN_ABOVE",
+      "value": 0.01,
+      "expected_valid": true,
+      "description": "deal_value just above minimum boundary (0.01)"
+    }
+  ],
+  "bva_probability": [
+    {
+      "field": "probability",
+      "test_type": "BVA_MIN_BELOW",
+      "value": -0.1,
+      "expected_valid": false,
+      "description": "probability just below minimum boundary (-0.1)"
+    },
+    {
+      "field": "probability",
+      "test_type": "BVA_MIN_EXACT",
+      "value": 0.0,
+      "expected_valid": true,
+      "description": "probability exact minimum boundary (0.0)"
+    },
+    {
+      "field": "probability",
+      "test_type": "BVA_MIN_ABOVE",
+      "value": 0.1,
+      "expected_valid": true,
+      "description": "probability just above minimum boundary (0.1)"
+    },
+    {
+      "field": "probability",
+      "test_type": "BVA_MAX_BELOW",
+      "value": 99.9,
+      "expected_valid": true,
+      "description": "probability just below maximum boundary (99.9)"
+    },
+    {
+      "field": "probability",
+      "test_type": "BVA_MAX_EXACT",
+      "value": 100.0,
+      "expected_valid": true,
+      "description": "probability exact maximum boundary (100.0)"
+    },
+    {
+      "field": "probability",
+      "test_type": "BVA_MAX_ABOVE",
+      "value": 100.1,
+      "expected_valid": false,
+      "description": "probability just above maximum boundary (100.1)"
+    }
+  ],
+  "ep_currency": [
+    {
+      "partition": "LARGE_NEGATIVE",
+      "field": "deal_value",
+      "value": -100000.0,
+      "expected_valid": false,
+      "description": "Large negative currency amount"
+    },
+    {
+      "partition": "SMALL_NEGATIVE",
+      "field": "deal_value",
+      "value": -0.01,
+      "expected_valid": false,
+      "description": "Smallest negative fractional currency"
+    },
+    {
+      "partition": "ZERO_BOUNDARY",
+      "field": "deal_value",
+      "value": 0.0,
+      "expected_valid": true,
+      "description": "Zero nominal currency amount"
+    },
+    {
+      "partition": "TYPICAL_POSITIVE",
+      "field": "deal_value",
+      "value": 25000.0,
+      "expected_valid": true,
+      "description": "Standard business positive currency value"
+    },
+    {
+      "partition": "LARGE_ENTERPRISE_POSITIVE",
+      "field": "deal_value",
+      "value": 5000000.0,
+      "expected_valid": true,
+      "description": "High-value enterprise currency value"
+    }
+  ],
+  "lead_conversion_cases": [
+    {
+      "case_id": "GEN-LC-01",
+      "category": "Happy Path",
+      "payload": {
+        "lead": "CRM-LEAD-2026-00001",
+        "deal_value": 45000.0,
+        "currency": "USD"
+      },
+      "expected_status": 200,
+      "expected_error": null
+    },
+    {
+      "case_id": "GEN-LC-02",
+      "category": "Schema Violation",
+      "payload": {
+        "deal_value": 45000.0,
+        "currency": "USD"
+      },
+      "expected_status": 404,
+      "expected_error": "Lead None not found"
+    },
+    {
+      "case_id": "GEN-LC-03",
+      "category": "BVA Violation",
+      "payload": {
+        "lead": "CRM-LEAD-2026-00001",
+        "deal_value": -0.01,
+        "currency": "USD"
+      },
+      "expected_status": 400,
+      "expected_error": "Deal value cannot be negative"
+    },
+    {
+      "case_id": "GEN-LC-04",
+      "category": "BVA Valid Boundary",
+      "payload": {
+        "lead": "CRM-LEAD-2026-00001",
+        "deal_value": 0.0,
+        "currency": "USD"
+      },
+      "expected_status": 200,
+      "expected_error": null
+    },
+    {
+      "case_id": "GEN-LC-05",
+      "category": "EP High Positive",
+      "payload": {
+        "lead": "CRM-LEAD-2026-00001",
+        "deal_value": 15000000.0,
+        "currency": "USD"
+      },
+      "expected_status": 200,
+      "expected_error": null
+    }
+  ],
+  "deal_status_cases": [
+    {
+      "case_id": "GEN-DS-01",
+      "category": "Lifecycle Valid",
+      "payload": {
+        "status": "Won",
+        "deal_value": 30000.0
+      },
+      "expected_status": 200,
+      "expected_error": null
+    },
+    {
+      "case_id": "GEN-DS-02",
+      "category": "BR-02 Valid Lost Reason",
+      "payload": {
+        "status": "Lost",
+        "lost_reason": "Price",
+        "deal_value": 30000.0
+      },
+      "expected_status": 200,
+      "expected_error": null
+    },
+    {
+      "case_id": "GEN-DS-03",
+      "category": "BR-02 Violation Missing Reason",
+      "payload": {
+        "status": "Lost",
+        "deal_value": 30000.0
+      },
+      "expected_status": 400,
+      "expected_error": "Lost reason is mandatory when status is Lost"
+    },
+    {
+      "case_id": "GEN-DS-04",
+      "category": "BR-02 Violation Missing Other Notes",
+      "payload": {
+        "status": "Lost",
+        "lost_reason": "Other",
+        "lost_notes": "",
+        "deal_value": 30000.0
+      },
+      "expected_status": 400,
+      "expected_error": "Lost notes are mandatory when lost reason is Other"
+    },
+    {
+      "case_id": "GEN-DS-05",
+      "category": "BR-02 Valid Other With Notes",
+      "payload": {
+        "status": "Lost",
+        "lost_reason": "Other",
+        "lost_notes": "Project delayed due to internal restructuring",
+        "deal_value": 30000.0
+      },
+      "expected_status": 200,
+      "expected_error": null
+    },
+    {
+      "case_id": "GEN-DS-06",
+      "category": "BR-01 Boundary Negative Rejection",
+      "payload": {
+        "deal_value": -0.01
+      },
+      "expected_status": 400,
+      "expected_error": "deal_value cannot be negative"
+    }
+  ]
+}

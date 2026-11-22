@@ -1,0 +1,317 @@
+openapi: 3.0.3
+info:
+  title: Frappe CRM Leads and Deals API
+  description: OpenAPI 3.0 specification for Frappe CRM Leads and Deals workflows, covering Lead-to-Deal Conversion, Deal Lifecycle, and Validation Rules.
+  version: 2.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local Frappe Development Bench
+
+paths:
+  /api/method/crm.fcrm.doctype.crm_lead.crm_lead.convert_to_deal:
+    post:
+      summary: Convert Lead to Deal
+      description: Converts an active Lead into a new or linked Deal entity according to BR-04.
+      operationId: convertToDeal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertLeadRequest'
+      responses:
+        '200':
+          description: Lead successfully converted to Deal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConvertLeadResponse'
+        '400':
+          description: Invalid conversion parameters or business rule violation (e.g. Lead status is Lost)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - User lacks Sales Manager / Sales User permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Lead record not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/resource/CRM Deal:
+    post:
+      summary: Create a new CRM Deal
+      description: Creates a new Deal record with boundary validations on currency and expected values.
+      operationId: createDeal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CRMDealInput'
+      responses:
+        '200':
+          description: Deal created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CRMDealResponse'
+        '400':
+          description: Validation error (e.g. negative currency)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/resource/CRM Deal/{name}:
+    get:
+      summary: Get Deal details
+      description: Retrieves complete Deal record including linked lead and audit attributes.
+      operationId: getDeal
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Deal document ID (e.g. CRM-DEAL-2026-00001)
+      responses:
+        '200':
+          description: Deal record details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CRMDealResponse'
+        '404':
+          description: Deal not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update Deal
+      description: Update Deal status, financial values, or lost reason attributes according to BR-01, BR-02, BR-03.
+      operationId: updateDeal
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Deal document ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CRMDealUpdateInput'
+      responses:
+        '200':
+          description: Deal updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CRMDealResponse'
+        '400':
+          description: Validation failure on business logic (e.g. missing lost reason or negative values)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: User lacks update rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/method/frappe.client.set_value:
+    post:
+      summary: Generic RPC field updater
+      description: Updates individual field values on a DocType record.
+      operationId: setValueRpc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - doctype
+                - name
+                - fieldname
+                - value
+              properties:
+                doctype:
+                  type: string
+                  example: "CRM Deal"
+                name:
+                  type: string
+                  example: "CRM-DEAL-2026-00001"
+                fieldname:
+                  type: string
+                  example: "status"
+                value:
+                  type: string
+                  example: "Won"
+      responses:
+        '200':
+          description: Field value updated
+        '400':
+          description: Validation failure
+
+components:
+  schemas:
+    ConvertLeadRequest:
+      type: object
+      required:
+        - lead
+      properties:
+        lead:
+          type: string
+          description: Name of the Lead document to convert
+          example: "CRM-LEAD-2026-00001"
+        deal_name:
+          type: string
+          description: Optional custom title for the created deal
+          example: "Enterprise Software License - Acme Corp"
+        organization:
+          type: string
+          description: Optional linked organization ID
+        deal_value:
+          type: number
+          format: float
+          minimum: 0.0
+          description: Non-negative deal value (BR-01)
+          example: 50000.00
+        currency:
+          type: string
+          default: "USD"
+          example: "USD"
+
+    ConvertLeadResponse:
+      type: object
+      properties:
+        message:
+          type: object
+          properties:
+            deal:
+              type: string
+              example: "CRM-DEAL-2026-00001"
+            lead:
+              type: string
+              example: "CRM-LEAD-2026-00001"
+            status:
+              type: string
+              example: "Converted"
+
+    CRMDealInput:
+      type: object
+      required:
+        - status
+      properties:
+        deal_name:
+          type: string
+          example: "Big Deal Q4"
+        lead:
+          type: string
+          description: Foreign key reference to CRM Lead
+          example: "CRM-LEAD-2026-00001"
+        status:
+          type: string
+          enum: [Lead, Qualified, Contacted, Opportunity, Proposal, In Negotiation, Won, Lost]
+          default: "Opportunity"
+        deal_value:
+          type: number
+          format: float
+          minimum: 0.0
+          description: Monetary deal amount (BR-01 3-point boundary)
+          example: 25000.00
+        expected_deal_value:
+          type: number
+          format: float
+          minimum: 0.0
+          example: 20000.00
+        probability:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 100.0
+          example: 80.0
+        currency:
+          type: string
+          default: "USD"
+          example: "USD"
+        lost_reason:
+          type: string
+          enum: [Price, Competitor, Feature Gap, Budget Cut, Timing, Other]
+          description: Required if status is Lost (BR-02)
+        lost_notes:
+          type: string
+          description: Mandatory if lost_reason is Other (BR-02)
+
+    CRMDealUpdateInput:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [Lead, Qualified, Contacted, Opportunity, Proposal, In Negotiation, Won, Lost]
+        deal_value:
+          type: number
+          format: float
+          minimum: 0.0
+        expected_deal_value:
+          type: number
+          format: float
+          minimum: 0.0
+        probability:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 100.0
+        lost_reason:
+          type: string
+          enum: [Price, Competitor, Feature Gap, Budget Cut, Timing, Other]
+        lost_notes:
+          type: string
+
+    CRMDealResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "CRM-DEAL-2026-00001"
+            lead:
+              type: string
+              example: "CRM-LEAD-2026-00001"
+            status:
+              type: string
+              example: "Won"
+            deal_value:
+              type: number
+              example: 50000.00
+            closed_date:
+              type: string
+              format: date
+              example: "2026-11-22"
+
+    ErrorResponse:
+      type: object
+      properties:
+        exc_type:
+          type: string
+          example: "ValidationError"
+        exception:
+          type: string
+          example: "Deal value cannot be negative"
