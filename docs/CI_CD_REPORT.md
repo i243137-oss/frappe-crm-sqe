@@ -55,6 +55,25 @@ The quality gate automatically triggers on **every pull request** and direct com
 ---
 
 ### 3.2 Case Study 2: Pull Request Blocked by Quality Gate
-* **Target Demonstration:** Automated merge block enforcement on quality degradation.
-* **Mechanism:** When a branch introduces a code defect, broken test expectation, or coverage regression below $80\%$, GitHub Actions triggers an immediate non-zero exit code.
-* **Protected Branch Policy:** GitHub repository settings designate `main` and `dev` as protected branches requiring status checks to pass before merging, preventing engineers from merging failing changes.
+* **Target PR:** PR #3 (`feat/blocked-quality-gate-demonstration` $\to$ `dev`)
+* **Pull Request Link:** `https://github.com/i243137-oss/frappe-crm-sqe/pull/3`
+* **Triggering Event:** Introduction of a regression in `tests/team/unit/test_quality_gate_block_demo.py` violating mandatory unit test expectations.
+* **GitHub Actions Run ID:** `45003934086` (Job ID: `137151243096`)
+* **Execution Duration:** 33 seconds
+* **Outcome:** **FAILED (Merge Blocked)**
+
+#### Pipeline Execution Breakdown:
+1. `Set up job` - Completed successfully.
+2. `Checkout Code` - Completed successfully.
+3. `Clone Upstream CRM Codebase` - Completed successfully.
+4. `Set up Python 3.12` - Completed successfully.
+5. `Install System & Python Dependencies` - Completed successfully.
+6. `Run Smoke Verification` - Completed successfully.
+7. `Run White-Box Unit Tests & Measure Coverage` - **FAILED (Exit code 1)**:
+   ```text
+   FAILED tests/team/unit/test_quality_gate_block_demo.py::test_mandatory_quality_condition_violation
+   AssertionError: CRITICAL DEFECT: Quality Gate Block Triggered - Merging Disallowed
+   ```
+8. **Downstream Execution Halt:** All subsequent steps (`Run REST & RPC API Tests`, `Run Playwright E2E Tests`, `Run Accessibility WCAG Audit`, `Execute Mutation Quality Gate`) were immediately skipped.
+9. **Merge Blocking Enforcement:** GitHub CI quality checks reported `fail 33s`. Merging was strictly disallowed and blocked by the repository protection policies.
+10. **Resolution:** Pull Request #3 was formally rejected and closed without merging to prevent contamination of `dev`.
