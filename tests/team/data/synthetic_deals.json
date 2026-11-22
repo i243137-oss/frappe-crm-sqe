@@ -1,0 +1,72 @@
+[
+  {
+    "id": "DEAL-SYN-001",
+    "description": "Open Deal in Qualification stage",
+    "partition": "Valid Open",
+    "payload": {
+      "name": "DEAL-SYN-001",
+      "organization": "Alpha Industries",
+      "status": "Qualification",
+      "deal_value": 45000.0,
+      "probability": 10,
+      "deal_owner": "rep@example.com",
+      "closed_date": null
+    }
+  },
+  {
+    "id": "DEAL-SYN-002",
+    "description": "Deal in Negotiation stage",
+    "partition": "Valid Ongoing",
+    "payload": {
+      "name": "DEAL-SYN-002",
+      "organization": "Beta Logistics",
+      "status": "Negotiation",
+      "deal_value": 75000.0,
+      "probability": 50,
+      "deal_owner": "rep@example.com",
+      "closed_date": null
+    }
+  },
+  {
+    "id": "DEAL-SYN-003",
+    "description": "Won Deal with automated closed date (BR-03)",
+    "partition": "Valid Closed Won",
+    "payload": {
+      "name": "DEAL-SYN-003",
+      "organization": "Gamma Healthcare",
+      "status": "Won",
+      "deal_value": 150000.0,
+      "probability": 100,
+      "deal_owner": "rep@example.com",
+      "closed_date": "2026-11-22"
+    }
+  },
+  {
+    "id": "DEAL-SYN-004",
+    "description": "Lost Deal with standard reason (BR-02 MCC-07)",
+    "partition": "Valid Closed Lost Standard",
+    "payload": {
+      "name": "DEAL-SYN-004",
+      "organization": "Delta Real Estate",
+      "status": "Lost",
+      "lost_reason": "Price too high",
+      "lost_notes": null,
+      "deal_value": 20000.0,
+      "deal_owner": "rep@example.com"
+    }
+  },
+  {
+    "id": "DEAL-SYN-005",
+    "description": "Lost Deal with reason Other and notes (BR-02 MCC-10)",
+    "partition": "Valid Closed Lost Other With Notes",
+    "payload": {
+      "name": "DEAL-SYN-005",
+      "organization": "Epsilon Retail",
+      "status": "Lost",
+      "lost_reason": "Other",
+      "lost_notes": "Client opted to build proprietary in-house solution",
+      "deal_value": 60000.0,
+      "deal_owner": "rep@example.com"
+    }
+  }
+]
