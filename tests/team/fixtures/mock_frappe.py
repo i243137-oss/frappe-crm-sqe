@@ -341,7 +341,17 @@ class Document:
         if not has_permission(self.doctype, permtype, self):
             throw(f"No permission to {permtype} {self.doctype} {self.name}", PermissionError)
 
+    def validate_values(self):
+        """Enforces schema-level non_negative validation matching Frappe DocType definition."""
+        if self.doctype in ("CRM Deal", "CRM Lead"):
+            non_negative_fields = ("deal_value", "expected_deal_value", "annual_revenue", "total", "net_total")
+            for f in non_negative_fields:
+                val = self._data.get(f)
+                if val is not None and isinstance(val, (int, float)) and val < 0:
+                    throw(f"{f} cannot be negative ({val})", NonNegativeError)
+
     def insert(self, ignore_permissions: bool = False):
+        self.validate_values()
         if callable(getattr(self, "before_insert", None)):
             self.before_insert()
         if callable(getattr(self, "before_validate", None)):
@@ -355,6 +365,7 @@ class Document:
         return self
 
     def save(self, ignore_permissions: bool = False):
+        self.validate_values()
         if callable(getattr(self, "before_validate", None)):
             self.before_validate()
         if callable(getattr(self, "validate", None)):

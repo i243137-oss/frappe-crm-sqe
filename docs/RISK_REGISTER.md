@@ -29,10 +29,24 @@ $$\text{Risk Score (RS)} = \text{Likelihood (L: 1–5)} \times \text{Impact (I: 
 | **RSK-06** | Test Quality | **Weak Test Assertions / Surviving Mutants:** Test suite passes green but asserts only HTTP 200 rather than database state mutations and side-effects. | 4 | 4 | **16 (High)** | Run mutation testing (`mutmut`); mandate killing all killable mutants and verifying persisted database state. | Enhance test assertions to verify child tables, timestamps, and relational fields. | Phase 8 (Mutation), Phase 9 (Sonar) |
 | **RSK-07** | Non-Functional | **Accessibility Violations:** Critical keyboard navigation and screen reader traps in `ConvertToDealModal.vue` and Deal status dropdowns. | 3 | 3 | **9 (Med)** | Automated `axe-core` and `Lighthouse` scans during Playwright browser automation runs. | Refactor Vue components to include proper ARIA roles, labels, and keyboard listeners. | Phase 10 (Accessibility) |
 | **RSK-08** | Performance | **Pessimistic Lock Degradation:** High volume of concurrent status updates or conversions causes database lock contention and latency spikes. | 3 | 4 | **12 (Med)** | Performance testing with `k6 OSS` at 1 VU and 5 concurrent VUs, measuring p95 response time and error rate. | Keep lock scope strictly within transaction; optimize database index on `tabCRM Lead.name`. | Phase 12 (Performance) |
+| **PRJ-01** | Project (CI/CD) | **CI Ephemeral Runner Environment Drift:** GitHub Actions clean runner lacks upstream repositories, system dependencies, or browser binaries, causing CI false failures. | 4 | 4 | **16 (High)** | Automated shallow clone in workflow, pinned `requirements.txt`, automated Playwright browser installation step. | Local reproduction scripts in pwsh and dockerized runner fallback. | Phase 8 (CI/CD), Phase 13 |
+| **PRJ-02** | Project (Schema) | **OpenAPI Specification Drift:** Schema constraints in OpenAPI spec drift out of alignment with backend DocType metadata, causing generator invalid payloads. | 2 | 4 | **8 (Med)** | Bidirectional schema validation test suite (`test_generated_data.py`) validating spec against mock fixtures. | Regenerate OpenAPI specification from Frappe DocType schema JSON files. | Phase 6 (Data Gen) |
 
 ---
 
-## 3. Risk Monitoring & Review Cycle
+## 3. Measurable Exit Criteria Tied to Highest Risks
+
+In adherence to project requirements, three measurable, objective exit criteria were established, with two directly tied to the highest-scoring risks:
+
+| Exit Criterion ID | Target Metric | Measurable Threshold | Linked Highest Risk(s) | Verification Evidence |
+| :---: | :--- | :--- | :---: | :--- |
+| **EC-01 (Functional & Mutation)** | Test Suite Pass Rate & Mutation Kill Rate | **100% Pass (0 failures across all levels)** AND **$\ge 80\%$ Mutation Score (Target: 100% of killable mutants)** | **RSK-01** (Score 15)<br>**RSK-06** (Score 16) | 107/107 tests passing; 16/16 AST mutants killed (100.0%) in `tests/team/mutation/mutation_runner.py`. |
+| **EC-02 (Security & RBAC)** | Defensive Security & Role Authorization Violations | **0 Critical / High RBAC Bypasses** AND **0 High-Risk Passive Scan Findings** | **RSK-03** (Score 12)<br>**RSK-02** (Score 10) | 6 RBAC access decisions verified (3 allowed, 3 denied); 0 high/critical vulnerabilities in `docs/SECURITY_REPORT.md`. |
+| **EC-03 (Performance & Reliability)** | Concurrency Latency & Failure Rate under Load | **$p95 \le 500\text{ ms}$** AND **Unexpected Failure Rate $< 1.0\%$** across 1 VU and 5 VUs | **RSK-08** (Score 12)<br>**RSK-01** (Score 15) | k6 OSS benchmarks report $p95 = 1.6\text{--}4.4\text{ ms}$, 0.0% unexpected failures in `docs/PERFORMANCE_REPORT.md`. |
+
+---
+
+## 4. Risk Monitoring & Review Cycle
 
 1. **Phase Gate Reviews:** At the conclusion of each phase, the risk register is reviewed to confirm whether test evidence successfully mitigates the targeted risk.
 2. **Defect Feedback Loop:** Any discovered defects trigger an immediate re-evaluation of likelihood and impact scores.
