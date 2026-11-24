@@ -27,7 +27,17 @@ This repository contains the comprehensive, evidence-based Software Quality Engi
 
 ---
 
-## 2. Master Deliverables Directory
+## 2. Project Group Members & Contributors
+
+| Contributor Name | Role & Quality Engineering Specialization |
+| :--- | :--- |
+| **Umair Hassan** | **Lead Quality Engineer:** Test Infrastructure, CI/CD Quality Gates, Architecture Discovery & Defensive Security Assessment |
+| **Abdullah** | **Test Automation Engineer:** White-Box Unit Testing, API/Integration Testing, OpenAPI Data Generator & AST Mutation Quality Gates |
+| **Muhammad Aans** | **Quality & Performance Analyst:** WCAG 2.1 AA Usability/Accessibility, k6 Load Benchmarking, Fault Recovery & Defect Root Cause Analysis |
+
+---
+
+## 3. Master Deliverables Directory
 
 The repository is structured to maintain complete isolation between upstream Frappe CRM logic and all team-authored test harnesses, mock runtimes, synthetic generators, and documentation:
 
@@ -76,7 +86,7 @@ frappe-crm-sqe/
 
 ---
 
-## 3. Comprehensive Deliverables Index
+## 4. Comprehensive Deliverables Index
 
 | # | Deliverable Document | Focus & Methodology | Status |
 | :-: | :--- | :--- | :-: |
@@ -106,7 +116,7 @@ frappe-crm-sqe/
 
 ---
 
-## 4. Test Suite Execution & Local Reproduction
+## 5. Test Suite Execution & Local Reproduction
 
 ### Prerequisites
 - Python 3.12+
@@ -192,7 +202,7 @@ flake8 tests/team --count --select=E9,F63,F7,F82 --show-source --statistics
 
 ---
 
-## 5. Summary of Quality Metrics
+## 6. Summary of Quality Metrics
 
 | Engineering Dimension | Pre-defined Target | Achieved Metric | Evaluation Status |
 | :--- | :--- | :--- | :---: |
@@ -212,7 +222,7 @@ flake8 tests/team --count --select=E9,F63,F7,F82 --show-source --statistics
 
 ---
 
-## 6. Continuous Integration Workflow
+## 7. Continuous Integration Workflow
 
 The GitHub Actions CI Quality Gate ([`.github/workflows/sqe_quality_gate.yml`](.github/workflows/sqe_quality_gate.yml)) enforces strict quality checks on every push and pull request against `dev` and `main`:
 
@@ -234,7 +244,7 @@ flowchart LR
 
 ---
 
-## 7. Viva Voce Defense Key Reference Guide
+## 8. Viva Voce Defense Key Reference Guide
 
 - **Cyclomatic Complexity Derivation:** Evaluated via three independent mathematical formalisms ($M = E - N + 2P$, $M = P + 1$, and Closed Regions $+ 1$) on `validate_lost_reason`, yielding exactly $V(G) = 7$ across 7 independent basis execution paths.
 - **MC/DC Formal Proof:** Four independent condition pairs for BR-02 ($A$: status is Lost, $B$: lost reason provided, $C$: reason is Other, $D$: explanatory notes provided) isolating the distinct outcome toggle of each condition while keeping all others constant.
