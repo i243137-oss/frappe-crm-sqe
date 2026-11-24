@@ -112,4 +112,4 @@ Rationale:
 | :--- | :--- | :---: |
 | **Umair Hassan** | Lead Quality Engineer (Test Infrastructure, CI/CD Quality Gates & Security) | **Signed & Approved** |
 | **Abdullah** | Test Automation Engineer (Unit/API Testing, OpenAPI Generator & Mutation) | **Signed & Approved** |
-| **Muhammad Aans** | Quality Analyst (WCAG 2.1 AA Usability, Performance & Defect RCA) | **Signed & Approved** |
+| **Muhammad Anas** | Quality Analyst (WCAG 2.1 AA Usability, Performance & Defect RCA) | **Signed & Approved** |

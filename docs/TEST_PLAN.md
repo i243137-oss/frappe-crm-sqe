@@ -145,5 +145,5 @@ where $O$ is Optimistic effort (hours), $M$ is Most Likely effort (hours), and $
 | :--- | :--- |
 | **Umair Hassan** | **Lead Quality Engineer:** Test infrastructure, CI/CD quality gates, architecture discovery, and defensive security assessment. |
 | **Abdullah** | **Test Automation Engineer:** White-box unit testing, API/integration testing, OpenAPI data generator, and AST mutation quality gates. |
-| **Muhammad Aans** | **Quality & Performance Analyst:** WCAG 2.1 AA usability/accessibility auditing, k6 load benchmarking, fault recovery, and defect root cause analysis. |
+| **Muhammad Anas** | **Quality & Performance Analyst:** WCAG 2.1 AA usability/accessibility auditing, k6 load benchmarking, fault recovery, and defect root cause analysis. |
 

@@ -33,7 +33,7 @@ This repository contains the comprehensive, evidence-based Software Quality Engi
 | :--- | :--- |
 | **Umair Hassan** | **Lead Quality Engineer:** Test Infrastructure, CI/CD Quality Gates, Architecture Discovery & Defensive Security Assessment |
 | **Abdullah** | **Test Automation Engineer:** White-Box Unit Testing, API/Integration Testing, OpenAPI Data Generator & AST Mutation Quality Gates |
-| **Muhammad Aans** | **Quality & Performance Analyst:** WCAG 2.1 AA Usability/Accessibility, k6 Load Benchmarking, Fault Recovery & Defect Root Cause Analysis |
+| **Muhammad Anas** | **Quality & Performance Analyst:** WCAG 2.1 AA Usability/Accessibility, k6 Load Benchmarking, Fault Recovery & Defect Root Cause Analysis |
 
 ---
 
