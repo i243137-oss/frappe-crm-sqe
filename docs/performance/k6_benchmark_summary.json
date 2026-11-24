@@ -1,0 +1,46 @@
+[
+  {
+    "vus": 1,
+    "run": "1",
+    "duration": "60s",
+    "total_requests": 1123,
+    "rps": 18.71,
+    "latency_avg_ms": 1.23,
+    "latency_p95_ms": 2.54,
+    "latency_max_ms": 32.77,
+    "failure_rate_pct": 0
+  },
+  {
+    "vus": 1,
+    "run": "2",
+    "duration": "60s",
+    "total_requests": 1138,
+    "rps": 18.95,
+    "latency_avg_ms": 0.97,
+    "latency_p95_ms": 1.6,
+    "latency_max_ms": 41.78,
+    "failure_rate_pct": 0
+  },
+  {
+    "vus": 5,
+    "run": "1",
+    "duration": "60s",
+    "total_requests": 5542,
+    "rps": 92.31,
+    "latency_avg_ms": 1.7,
+    "latency_p95_ms": 3.96,
+    "latency_max_ms": 88.93,
+    "failure_rate_pct": 0
+  },
+  {
+    "vus": 5,
+    "run": "2",
+    "duration": "60s",
+    "total_requests": 5396,
+    "rps": 89.87,
+    "latency_avg_ms": 1.95,
+    "latency_p95_ms": 4.36,
+    "latency_max_ms": 300.96,
+    "failure_rate_pct": 0
+  }
+]

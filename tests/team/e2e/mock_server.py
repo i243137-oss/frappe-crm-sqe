@@ -262,6 +262,30 @@ class MockCRMHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
+    def do_POST(self):
+        if self.path == "/api/method/crm.fcrm.doctype.crm_lead.crm_lead.convert_to_deal":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length) if content_length > 0 else b"{}"
+            try:
+                payload = json.loads(body.decode("utf-8"))
+            except Exception:
+                payload = {}
+            deal_name = "CRM-DEAL-2026-00001"
+            res = json.dumps({"message": deal_name})
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("X-Frame-Options", "SAMEORIGIN")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate")
+            self.end_headers()
+            self.wfile.write(res.encode("utf-8"))
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, format, *args):
+        pass
+
 
 def run_mock_server():
     server = socketserver.TCPServer(("127.0.0.1", PORT), MockCRMHandler)

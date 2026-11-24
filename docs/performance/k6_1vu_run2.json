@@ -1,0 +1,150 @@
+{
+    "metrics": {
+        "data_sent": {
+            "count": 443820,
+            "rate": 7391.865240810471
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_receiving": {
+            "avg": 0.24411485061511426,
+            "min": 0,
+            "med": 0,
+            "max": 3.5921,
+            "p(90)": 0.59562,
+            "p(95)": 0.6808799999999998
+        },
+        "checks": {
+            "passes": 3414,
+            "fails": 0,
+            "thresholds": {
+                "rate>0.99": false
+            },
+            "value": 1
+        },
+        "iterations": {
+            "count": 1138,
+            "rate": 18.953500617462744
+        },
+        "vus": {
+            "min": 1,
+            "max": 1,
+            "value": 1
+        },
+        "data_received": {
+            "count": 311812,
+            "rate": 5193.259169184792
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 1138,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 0.9686181898066779,
+            "min": 0,
+            "med": 0.7714000000000001,
+            "max": 41.7776,
+            "p(90)": 1.3220100000000001,
+            "p(95)": 1.6005349999999998
+        },
+        "http_req_blocked": {
+            "max": 199.9564,
+            "p(90)": 1.25625,
+            "p(95)": 1.6515449999999985,
+            "avg": 1.0041237258347984,
+            "min": 0,
+            "med": 0.8242
+        },
+        "http_req_connecting": {
+            "p(95)": 1.4498399999999991,
+            "avg": 0.9441502636203868,
+            "min": 0,
+            "med": 0.7972,
+            "max": 199.9564,
+            "p(90)": 1.1796
+        },
+        "http_req_sending": {
+            "p(90)": 0.51283,
+            "p(95)": 0.6263399999999998,
+            "avg": 0.07308637961335675,
+            "min": 0,
+            "med": 0,
+            "max": 1.0026
+        },
+        "http_req_duration": {
+            "avg": 0.9686181898066779,
+            "min": 0,
+            "med": 0.7714000000000001,
+            "max": 41.7776,
+            "p(90)": 1.3220100000000001,
+            "p(95)": 1.6005349999999998,
+            "thresholds": {
+                "p(95)<300": false
+            }
+        },
+        "http_reqs": {
+            "count": 1138,
+            "rate": 18.953500617462744
+        },
+        "vus_max": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "http_req_waiting": {
+            "p(95)": 1.2133849999999997,
+            "avg": 0.6514169595782078,
+            "min": 0,
+            "med": 0.5803499999999999,
+            "max": 40.7802,
+            "p(90)": 0.79205
+        },
+        "iteration_duration": {
+            "p(90)": 53.3799,
+            "p(95)": 54.447395,
+            "avg": 52.75894314586998,
+            "min": 50.8505,
+            "med": 52.03155,
+            "max": 328.0972
+        }
+    },
+    "root_group": {
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+            "status is 200": {
+                "path": "::status is 200",
+                "id": "6210a8cd14cd70477eba5c5e4cb3fb5f",
+                "passes": 1138,
+                "fails": 0,
+                "name": "status is 200"
+            },
+            "response has deal message": {
+                "name": "response has deal message",
+                "path": "::response has deal message",
+                "id": "b212050bfe3a947abbcf90e336b633f0",
+                "passes": 1138,
+                "fails": 0
+            },
+            "latency under 300ms": {
+                "passes": 1138,
+                "fails": 0,
+                "name": "latency under 300ms",
+                "path": "::latency under 300ms",
+                "id": "2142ccd84a57c018ad4f20a4d9dfb007"
+            }
+        },
+        "name": "",
+        "path": ""
+    }
+}

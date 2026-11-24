@@ -63,6 +63,10 @@ jobs:
         run: |
           pytest tests/team/security/ -v
 
+      - name: Run Controlled Failure and Recovery Testing
+        run: |
+          pytest tests/team/performance/test_failure_and_recovery.py -v
+
       - name: Execute Mutation Quality Gate
         run: |
           python tests/team/mutation/mutation_runner.py
