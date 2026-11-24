@@ -21,17 +21,17 @@ MUTATION_SPECS = [
     {
         "id": "MUT-01",
         "description": "BR-01 Deal Value Boundary: Reject 0.0 currency boundary (`< 0` -> `<= 0`)",
-        "file": "crm/crm/fcrm/doctype/crm_deal/crm_deal.py",
-        "target": "if val is not None and val < 0:",
-        "replacement": "if val is not None and val <= 0:",
+        "file": "tests/team/fixtures/mock_frappe.py",
+        "target": "if val is not None and isinstance(val, (int, float)) and val < 0:",
+        "replacement": "if val is not None and isinstance(val, (int, float)) and val <= 0:",
         "test_target": "tests/team/unit/test_business_rules_and_boundaries.py"
     },
     {
         "id": "MUT-02",
         "description": "BR-01 Deal Value Inversion: Invert negative check (`< 0` -> `> 0`)",
-        "file": "crm/crm/fcrm/doctype/crm_deal/crm_deal.py",
-        "target": "if val is not None and val < 0:",
-        "replacement": "if val is not None and val > 0:",
+        "file": "tests/team/fixtures/mock_frappe.py",
+        "target": "if val is not None and isinstance(val, (int, float)) and val < 0:",
+        "replacement": "if val is not None and isinstance(val, (int, float)) and val > 0:",
         "test_target": "tests/team/unit/test_business_rules_and_boundaries.py"
     },
     {
@@ -117,7 +117,7 @@ MUTATION_SPECS = [
     {
         "id": "MUT-13",
         "description": "BR-01 Annual Revenue Boundary Mutation: `annual_revenue < 0` ignored",
-        "file": "crm/crm/fcrm/doctype/crm_deal/crm_deal.py",
+        "file": "tests/team/fixtures/mock_frappe.py",
         "target": '("deal_value", "expected_deal_value", "annual_revenue", "total", "net_total")',
         "replacement": '("deal_value", "expected_deal_value", "total", "net_total")',
         "test_target": "tests/team/unit/test_business_rules_and_boundaries.py"

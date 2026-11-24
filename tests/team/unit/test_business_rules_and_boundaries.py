@@ -26,19 +26,17 @@ def test_br01_three_point_bva_currency_fields(clean_db, fieldname):
     """TC-UNIT-BR1-BVA: Evaluates below boundary (-0.01), at boundary (0.00), and above boundary (+0.01)."""
     # 1. Below boundary: -0.01 -> rejected
     negative_deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", fieldname: -0.01})
-    val = negative_deal.get(fieldname)
-    if val is not None and val < 0:
-        with pytest.raises(frappe.NonNegativeError):
-            frappe.throw(f"{fieldname} cannot be negative", frappe.NonNegativeError)
+    with pytest.raises(frappe.NonNegativeError):
+        negative_deal.save()
 
     # 2. Exactly at boundary: 0.00 -> accepted
     boundary_deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", fieldname: 0.00})
-    boundary_deal.validate_lost_reason()
+    boundary_deal.save()
     assert boundary_deal.get(fieldname) == 0.00
 
     # 3. Above boundary: +0.01 -> accepted
     above_deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", fieldname: 0.01})
-    above_deal.validate_lost_reason()
+    above_deal.save()
     assert above_deal.get(fieldname) == 0.01
 
 
@@ -54,14 +52,14 @@ def test_br01_three_point_bva_currency_fields(clean_db, fieldname):
         (999999.99, True),
     ],
 )
-def test_br01_equivalence_partitioning_currency(value, is_valid):
+def test_br01_equivalence_partitioning_currency(clean_db, value, is_valid):
     """TC-UNIT-BR1-EP: Verifies valid positive vs invalid negative equivalence partitions."""
+    deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", "deal_value": value})
     if not is_valid:
         with pytest.raises(frappe.NonNegativeError):
-            if value < 0:
-                frappe.throw("Currency cannot be negative", frappe.NonNegativeError)
+            deal.save()
     else:
-        deal = CRMDeal({"deal_value": value})
+        deal.save()
         assert deal.deal_value >= 0
 
 
