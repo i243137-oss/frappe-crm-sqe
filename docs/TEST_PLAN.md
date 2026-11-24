@@ -137,3 +137,13 @@ where $O$ is Optimistic effort (hours), $M$ is Most Likely effort (hours), and $
 | **13. Defect Management, RCA & Completion** | 6.0 hrs | 10.0 hrs | 18.0 hrs | **10.7 hrs** | **11.0 hrs** | $+0.3$ hrs | 5 Whys, Ishikawa fishbone diagrams, Pareto analysis, and completion report. |
 | **TOTAL** | **76.0 hrs** | **143.0 hrs** | **254.0 hrs** | **146.5 hrs** | **152.0 hrs** | **$+5.5$ hrs (+3.75%)** | High estimation accuracy ($< 4\%$ variance across entire project lifecycle). |
 
+---
+
+## 7. Quality Engineering Team & Responsibilities
+
+| Team Member | Primary Roles & Quality Engineering Responsibilities |
+| :--- | :--- |
+| **Umair Hassan** | **Lead Quality Engineer:** Test infrastructure, CI/CD quality gates, architecture discovery, and defensive security assessment. |
+| **Abdullah** | **Test Automation Engineer:** White-box unit testing, API/integration testing, OpenAPI data generator, and AST mutation quality gates. |
+| **Muhammad Anas** | **Quality & Performance Analyst:** WCAG 2.1 AA usability/accessibility auditing, k6 load benchmarking, fault recovery, and defect root cause analysis. |
+

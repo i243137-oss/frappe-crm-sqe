@@ -4,6 +4,10 @@
 **Target Module:** Leads and Deals  
 **Document Reference:** `docs/AI_USE_RECORD.md`  
 **CLO Mapping:** CLO1 (Viva, Live Task & AI-Use Record – 20 Marks)  
+**Student Contributors & Group Members:**  
+- **Umair Hassan**
+- **Abdullah**
+- **Muhammad Anas**  
 
 ---
 
