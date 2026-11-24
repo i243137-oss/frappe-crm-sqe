@@ -1,0 +1,37 @@
+{
+  "currency_boundary_rule": {
+    "rule_id": "BR-01",
+    "description": "Currency fields must be non-negative (V >= 0.00)",
+    "target_fields": [
+      "deal_value",
+      "expected_deal_value",
+      "annual_revenue",
+      "total",
+      "net_total"
+    ],
+    "boundary_points": [
+      {
+        "point": "below_boundary",
+        "value": -0.01,
+        "expected_result": "rejected",
+        "expected_exception": "NonNegativeError"
+      },
+      {
+        "point": "at_boundary",
+        "value": 0.00,
+        "expected_result": "accepted",
+        "expected_exception": null
+      },
+      {
+        "point": "above_boundary",
+        "value": 0.01,
+        "expected_result": "accepted",
+        "expected_exception": null
+      }
+    ],
+    "equivalence_partitions": {
+      "valid_positive": [10.00, 500.50, 1000000.00],
+      "invalid_negative": [-0.50, -100.00, -999999.00]
+    }
+  }
+}
