@@ -164,6 +164,12 @@ def test_e2e_exception_flow_lost_reason_missing_or_empty_notes(page):
     expect(page.locator("#toast")).to_contain_text("Lost notes are mandatory for reason Other")
     expect(page.locator("#modal-lost")).to_be_visible()
 
+    # 3. Correct the value and verify success (as required by SQE specification)
+    page.fill("#input-lost-notes", "Client budget cancelled due to Q4 economic constraints")
+    page.click("#btn-lost-submit")
+    expect(page.locator("#toast")).to_contain_text("Deal marked as Lost")
+    expect(page.locator("#deal-status")).to_contain_text("Lost")
+
 
 def test_e2e_usability_keyboard_modal_escape_dismissal(page):
     """

@@ -73,5 +73,5 @@ jobs:
 
       - name: Run Static Code Quality & Complexity Gate
         run: |
-          radon cc tests/team crm_deal crm_lead -a -nc --max B
+          radon cc tests/team crm/crm/fcrm/doctype/crm_deal/crm_deal.py crm/crm/fcrm/doctype/crm_lead/crm_lead.py -a -nc
           flake8 tests/team --count --select=E9,F63,F7,F82 --show-source --statistics

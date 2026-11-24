@@ -1,7 +1,7 @@
 # Frappe CRM - Software Quality Engineering (SQE) Suite
 
 [![SQE CI Quality Gate](https://github.com/i243137-oss/frappe-crm-sqe/actions/workflows/sqe_quality_gate.yml/badge.svg)](https://github.com/i243137-oss/frappe-crm-sqe/actions/workflows/sqe_quality_gate.yml)
-[![Tests Passing](https://img.shields.io/badge/Tests-94%20Passed%20(100%25)-brightgreen.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-107%20Passed%20(100%25)-brightgreen.svg)]()
 [![Branch Coverage](https://img.shields.io/badge/Branch%20Coverage-100%25-brightgreen.svg)]()
 [![Mutation Score](https://img.shields.io/badge/Mutation%20Score-100%25%20(16%2F16%20Killed)-brightgreen.svg)]()
 [![Static Complexity](https://img.shields.io/badge/Radon%20Cyclomatic%20Complexity-Grade%20A%20(V(G)%3D7)-blue.svg)]()
@@ -134,6 +134,31 @@ pip install -r requirements.txt
 
 # Install Playwright browser binaries
 playwright install --with-deps chromium
+```
+
+### Starting the Application, Seeding Test Data & Resetting State
+
+In adherence to course requirements (*"Document the commands for installation, starting the application, seeding test data, and resetting it between runs"*):
+
+#### 1. Starting the Application
+To run the interactive web application workspace locally:
+```bash
+python tests/team/e2e/mock_server.py
+# Application starts at: http://127.0.0.1:9123
+```
+
+#### 2. Seeding Test Data
+To systematically synthesize and seed test fixtures (synthetic leads, deals, 3-point BVA, and equivalence partitions):
+```bash
+python tests/team/generator/data_generator.py
+# Seeds generated fixtures into: tests/team/data/generated_api_payloads.json
+```
+
+#### 3. Resetting Test Data Between Runs
+To purge all temporary database modifications and restore pristine baseline state:
+```bash
+pytest tests/team/unit/test_infrastructure_smoke.py -v
+# Executes mock_db.reset() and resets all database tables to initial baseline state
 ```
 
 ### Running Test Suites

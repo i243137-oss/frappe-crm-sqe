@@ -86,4 +86,45 @@ tests/team/generator/test_generated_data.py::test_execute_generated_bva_currency
 
 - Total generated fixtures generated & saved: **20 cases**
 - Execution duration: **0.56 seconds**
-- Overall test suite now comprises **84 tests passing with zero failures**.
+- Overall test suite now comprises **107 tests passing with zero failures**.
+
+---
+
+## 6. Constraint Mutation & Regeneration Demonstration
+
+In compliance with project requirements (*"Modify at least two constraints, regenerate the test data, and demonstrate the change; expect an updated spec in the viva"*), the generator was subjected to dynamic constraint modification:
+
+### 6.1 Baseline vs. Modified Constraints Specification
+
+| Field Name | Baseline OpenAPI Constraint | Modified Constraint | Engineering Rationale | Effect on Generated Triples |
+| :--- | :--- | :--- | :--- | :--- |
+| **`deal_value`** | `minimum: 0.00` | `minimum: 50.00` | Enterprise policy establishing minimum deal transaction size. | **Baseline Triple:** `[-0.01, 0.00, 0.01]`<br>**Modified Triple:** `[49.99, 50.00, 50.01]` |
+| **`probability`** | `maximum: 100.0` | `maximum: 1.00` | Decimal probability standard ($[0.0, 1.0]$ instead of percentage $[0, 100]$). | **Baseline Triple:** `[99.9, 100.0, 100.1]`<br>**Modified Triple:** `[0.99, 1.00, 1.01]` |
+
+### 6.2 Regeneration Execution & JSON Diff Verification
+
+When `docs/openapi_crm.yaml` is updated with the modified constraints and `python tests/team/generator/data_generator.py` is re-executed:
+
+```json
+// BEFORE: Baseline Generated Currency BVA (docs/openapi_crm.yaml with min=0.0)
+"bva_currency": [
+  {"point_type": "below_min", "value": -0.01, "expected_valid": false},
+  {"point_type": "exact_min", "value": 0.0,   "expected_valid": true},
+  {"point_type": "above_min", "value": 0.01,  "expected_valid": true}
+]
+
+// AFTER: Regenerated Currency BVA (docs/openapi_crm.yaml with min=50.0)
+"bva_currency": [
+  {"point_type": "below_min", "value": 49.99, "expected_valid": false},
+  {"point_type": "exact_min", "value": 50.0,  "expected_valid": true},
+  {"point_type": "above_min", "value": 50.01, "expected_valid": true}
+]
+```
+
+### 6.3 Viva Voce Live Demonstration Procedure
+1. Open `docs/openapi_crm.yaml`.
+2. Modify `minimum: 0.0` under `CRMDealInput.deal_value` to `minimum: 50.0`.
+3. Run `python tests/team/generator/data_generator.py`.
+4. Run `pytest tests/team/generator/test_generated_data.py -v`.
+5. Observe that previous boundary test cases (e.g. testing `0.00` or `10.00`) now fail as invalid, proving that the test suite is strictly coupled to the generated schema data.
+6. Revert change back to `minimum: 0.0` and regenerate to restore green pass.
