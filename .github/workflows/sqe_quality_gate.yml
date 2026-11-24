@@ -59,6 +59,10 @@ jobs:
         run: |
           pytest tests/team/a11y/ -v
 
+      - name: Run Defensive Security Assessment
+        run: |
+          pytest tests/team/security/ -v
+
       - name: Execute Mutation Quality Gate
         run: |
           python tests/team/mutation/mutation_runner.py

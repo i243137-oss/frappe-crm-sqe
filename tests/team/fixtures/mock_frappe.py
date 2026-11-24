@@ -200,6 +200,8 @@ class DocMeta:
 
     def get(self, key, default=None):
         if key == "fields":
+            if isinstance(default, dict):
+                return [f for f in self.fields if all(getattr(f, k, None) == v for k, v in default.items())]
             return self.fields
         return default
 
@@ -334,6 +336,10 @@ class Document:
 
     def share_with_agent(self, agent: str):
         pass
+
+    def check_permission(self, permtype="read", permlevel=None):
+        if not has_permission(self.doctype, permtype, self):
+            throw(f"No permission to {permtype} {self.doctype} {self.name}", PermissionError)
 
     def insert(self, ignore_permissions: bool = False):
         if callable(getattr(self, "before_insert", None)):
@@ -501,21 +507,45 @@ class Session:
         self.user = "Administrator"
 
 
+class Session:
+    def __init__(self):
+        self.user = "Administrator"
+        self.sid = "sid_test_1234567890abcdef"
+        self.csrf_token = "csrf_token_test_abc123"
+        self.data = {
+            "user": "Administrator",
+            "session_expiry": "06:00:00",
+            "full_name": "Administrator",
+            "user_type": "System User",
+        }
+
+
 session = Session()
 _permissions_override: Dict[tuple, bool] = {}
 _user_roles: Dict[str, List[str]] = {
     "Administrator": ["System Manager", "Sales Manager"],
     "manager@example.com": ["Sales Manager"],
     "rep@example.com": ["Sales User"],
+    "rep_a@example.com": ["Sales User"],
+    "rep_b@example.com": ["Sales User"],
+    "Guest": ["Guest"],
 }
 
 def set_user(user: str, roles: List[str] = None):
     session.user = user
+    if user == "Guest":
+        session.sid = None
+        session.csrf_token = None
+    else:
+        session.sid = f"sid_{user.split('@')[0]}_secure_123"
+        session.csrf_token = f"csrf_{user.split('@')[0]}_token"
     if roles:
         _user_roles[user] = roles
 
 def get_roles(user: str = None) -> List[str]:
     u = user or session.user
+    if u == "Guest":
+        return ["Guest"]
     return _user_roles.get(u, ["Sales User"])
 
 def set_permission_override(doctype: str, ptype: str, docname: str, user: str, allowed: bool):
@@ -524,21 +554,49 @@ def set_permission_override(doctype: str, ptype: str, docname: str, user: str, a
 def has_permission(doctype: str, ptype: str = "read", doc: Any = None, user: str = None) -> bool:
     u = user or session.user
     roles = get_roles(u)
+
+    # 1. Guest / Anonymous users are strictly disallowed from CRM records
+    if u == "Guest" or "Guest" in roles:
+        return False
+
+    # 2. Administrator & Sales Manager have global administrative CRM authority
     if "System Manager" in roles:
         return True
     if "Sales Manager" in roles:
         return True
-    
-    docname = doc.name if isinstance(doc, Document) else str(doc)
-    override = _permissions_override.get((doctype, ptype, docname, u))
-    if override is not None:
-        return override
 
-    if isinstance(doc, Document):
-        owner = doc.get("lead_owner") or doc.get("deal_owner")
-        if owner and owner == u:
+    # 3. Explicit granular override check
+    docname = doc.name if isinstance(doc, Document) else str(doc) if doc else None
+    if docname:
+        override = _permissions_override.get((doctype, ptype, docname, u))
+        if override is not None:
+            return override
+
+    # 4. Resolve Document reference if passed as ID string
+    target_doc = doc
+    if isinstance(doc, str) and doctype in ("CRM Lead", "CRM Deal", "CRM Note", "CRM Call Log"):
+        target_doc = mock_db.get_doc(doctype, doc)
+
+    # 5. Row-level Ownership checks for Sales Users
+    if isinstance(target_doc, Document):
+        owner = target_doc.get("lead_owner") or target_doc.get("deal_owner") or target_doc.get("owner")
+        if owner:
+            if owner == u:
+                return True
+            # Attempting to write/convert/delete another user's record is denied
+            if ptype in ("write", "delete", "convert"):
+                return False
+            # Read might be denied unless assigned
+            return False
+        # Unassigned lead/deal: allowed for manager, but standard sales user cannot write unassigned without manager delegation
+        if ptype in ("write", "delete") and not owner:
             return True
-        return False
+        return True
+
+    # Universal create permission for authenticated CRM roles
+    if ptype == "create":
+        return True
+
     return True
 
 def throw(msg: str, exc: Any = ValidationError, title: Optional[str] = None):

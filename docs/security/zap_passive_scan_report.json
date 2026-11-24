@@ -1,0 +1,90 @@
+{
+  "scanner": "OWASP ZAP Passive Scan Emulator v2.15.0",
+  "total_alerts": 6,
+  "alerts_by_risk": {
+    "High": 0,
+    "Medium": 2,
+    "Low": 3,
+    "Informational": 1
+  },
+  "alerts": [
+    {
+      "rule_id": 10035,
+      "name": "Strict-Transport-Security Header Not Set",
+      "risk": "Low",
+      "confidence": "High",
+      "url": "https://crm.local/app/crm-lead",
+      "description": "HTTP Strict Transport Security (HSTS) instructs browsers to only connect over HTTPS.",
+      "evidence": "Strict-Transport-Security header is absent on HTTPS URL",
+      "impact": "Users could be downgraded to insecure plain HTTP via SSL-stripping MITM attacks.",
+      "solution": "Set Strict-Transport-Security: max-age=31536000; includeSubDomains.",
+      "cwe_id": 319,
+      "wasc_id": 4
+    },
+    {
+      "rule_id": 10038,
+      "name": "Content Security Policy (CSP) Header Not Set",
+      "risk": "Medium",
+      "confidence": "High",
+      "url": "https://crm.local/api/method/crm.fcrm.doctype.crm_lead.crm_lead.convert_to_deal",
+      "description": "Content Security Policy (CSP) is an added layer of security that helps detect and mitigate Cross-Site Scripting (XSS) and data injection.",
+      "evidence": "Content-Security-Policy header is absent",
+      "impact": "Absence of CSP reduces defense-in-depth against XSS and unauthorized script execution.",
+      "solution": "Implement a restrictive CSP such as default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'.",
+      "cwe_id": 693,
+      "wasc_id": 15
+    },
+    {
+      "rule_id": 10035,
+      "name": "Strict-Transport-Security Header Not Set",
+      "risk": "Low",
+      "confidence": "High",
+      "url": "https://crm.local/api/method/crm.fcrm.doctype.crm_lead.crm_lead.convert_to_deal",
+      "description": "HTTP Strict Transport Security (HSTS) instructs browsers to only connect over HTTPS.",
+      "evidence": "Strict-Transport-Security header is absent on HTTPS URL",
+      "impact": "Users could be downgraded to insecure plain HTTP via SSL-stripping MITM attacks.",
+      "solution": "Set Strict-Transport-Security: max-age=31536000; includeSubDomains.",
+      "cwe_id": 319,
+      "wasc_id": 4
+    },
+    {
+      "rule_id": 10036,
+      "name": "Server Banner / Version Information Disclosure",
+      "risk": "Informational",
+      "confidence": "High",
+      "url": "https://crm.local/api/method/crm.fcrm.doctype.crm_lead.crm_lead.convert_to_deal",
+      "description": "The server header discloses technical version details.",
+      "evidence": "Server Header: Werkzeug/3.0.1",
+      "impact": "Assists attackers in profiling target software stacks and matching known CVE vulnerabilities.",
+      "solution": "Configure reverse proxy or web server to suppress granular version banners.",
+      "cwe_id": 200,
+      "wasc_id": 13
+    },
+    {
+      "rule_id": 10038,
+      "name": "Content Security Policy (CSP) Header Not Set",
+      "risk": "Medium",
+      "confidence": "High",
+      "url": "https://crm.local/api/resource/CRM Deal/CRM-DEAL-2026-00001",
+      "description": "Content Security Policy (CSP) is an added layer of security that helps detect and mitigate Cross-Site Scripting (XSS) and data injection.",
+      "evidence": "Content-Security-Policy header is absent",
+      "impact": "Absence of CSP reduces defense-in-depth against XSS and unauthorized script execution.",
+      "solution": "Implement a restrictive CSP such as default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'.",
+      "cwe_id": 693,
+      "wasc_id": 15
+    },
+    {
+      "rule_id": 10035,
+      "name": "Strict-Transport-Security Header Not Set",
+      "risk": "Low",
+      "confidence": "High",
+      "url": "https://crm.local/api/resource/CRM Deal/CRM-DEAL-2026-00001",
+      "description": "HTTP Strict Transport Security (HSTS) instructs browsers to only connect over HTTPS.",
+      "evidence": "Strict-Transport-Security header is absent on HTTPS URL",
+      "impact": "Users could be downgraded to insecure plain HTTP via SSL-stripping MITM attacks.",
+      "solution": "Set Strict-Transport-Security: max-age=31536000; includeSubDomains.",
+      "cwe_id": 319,
+      "wasc_id": 4
+    }
+  ]
+}
