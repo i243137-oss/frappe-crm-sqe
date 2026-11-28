@@ -53,11 +53,11 @@ class OpenAPIDataGenerator:
                         "properties": {
                             "deal_name": {"type": "string"},
                             "lead": {"type": "string"},
-                            "status": {"type": "string", "enum": ["Lead", "Opportunity", "Won", "Lost"]},
+                            "status": {"type": "string", "enum": ["Qualification", "Demo", "Proposal", "Negotiation", "Won", "Lost"]},
                             "deal_value": {"type": "number", "minimum": 0.0},
                             "expected_deal_value": {"type": "number", "minimum": 0.0},
                             "probability": {"type": "number", "minimum": 0.0, "maximum": 100.0},
-                            "lost_reason": {"type": "string", "enum": ["Price", "Competitor", "Feature Gap", "Other"]},
+                            "lost_reason": {"type": "string", "enum": ["Price too high", "Competitor", "Missing features", "Bad timing", "Other"]},
                             "lost_notes": {"type": "string"}
                         },
                         "required": ["status"]
