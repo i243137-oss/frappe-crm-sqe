@@ -118,6 +118,12 @@ frappe-crm-sqe/
 
 ## 5. Test Suite Execution & Local Reproduction
 
+### Upstream Baseline & License
+- **Upstream Repository:** `https://github.com/frappe/crm`
+- **Pinned Commit Hash:** `678ed0d5c99097674ce45dbbc502d8d2afee927d`
+- **Upstream License:** GNU Affero General Public License v3.0 (AGPLv3)
+- **Repository Isolation Policy:** Upstream CRM codebase resides in `crm/`. All team tests, test harnesses, and documentation are strictly isolated in `tests/team/` and `docs/`.
+
 ### Prerequisites
 - Python 3.12+
 - Node.js 18+ (for k6 and Playwright browser engines)
@@ -125,9 +131,13 @@ frappe-crm-sqe/
 
 ### Installation
 ```bash
-# Clone the repository
+# Clone the SQE repository
 git clone https://github.com/i243137-oss/frappe-crm-sqe.git
 cd frappe-crm-sqe
+
+# Clone and pin the exact upstream Frappe CRM baseline commit
+git clone https://github.com/frappe/crm crm
+cd crm && git checkout 678ed0d5c99097674ce45dbbc502d8d2afee927d && cd ..
 
 # Install Python dependencies
 pip install -r requirements.txt
@@ -138,35 +148,46 @@ playwright install --with-deps chromium
 
 ### Starting the Application, Seeding Test Data & Resetting State
 
-In adherence to course requirements (*"Document the commands for installation, starting the application, seeding test data, and resetting it between runs"*):
+In adherence to SQE specification requirements (*"Document the commands for installation, starting the application, seeding test data, and resetting it between runs"*):
 
 #### 1. Starting the Application
-To run the interactive web application workspace locally:
-```bash
-python tests/team/e2e/mock_server.py
-# Application starts at: http://127.0.0.1:9123
-```
+- **Standard Frappe Bench Environment (Full Stack):**
+  ```bash
+  cd /path/to/frappe-bench
+  bench start
+  # Production application runs at: http://localhost:8000
+  ```
+- **Lightweight Test Harness UI (for isolated E2E and visual accessibility inspection):**
+  ```bash
+  python tests/team/e2e/mock_server.py
+  # Harness UI runs at: http://127.0.0.1:9123
+  ```
 
 #### 2. Seeding Test Data
 To systematically synthesize and seed test fixtures (synthetic leads, deals, 3-point BVA, and equivalence partitions):
 ```bash
 python tests/team/generator/data_generator.py
-# Seeds generated fixtures into: tests/team/data/generated_api_payloads.json
+# Generates structured OpenAPI test fixtures in: tests/team/data/generated_api_payloads.json
 ```
 
 #### 3. Resetting Test Data Between Runs
-To purge all temporary database modifications and restore pristine baseline state:
-```bash
-pytest tests/team/unit/test_infrastructure_smoke.py -v
-# Executes mock_db.reset() and resets all database tables to initial baseline state
-```
+- **Frappe Bench Database Reset:**
+  ```bash
+  bench --site crm.localhost reinstall --yes
+  bench --site crm.localhost migrate
+  ```
+- **Automated Test Environment Reset:**
+  Every test run automatically resets database tables and session state between tests via `autouse=True` fixtures in `tests/team/fixtures/mock_frappe.py`:
+  ```bash
+  python -c "from tests.team.fixtures.mock_frappe import mock_db; mock_db.reset(); print('Database tables reset to initial state')"
+  ```
 
 ### Running Test Suites
 
 #### 1. White-Box Unit Testing & Coverage
 ```bash
-# Execute unit tests and verify 100% statement and branch coverage
-pytest tests/team/unit/ -v --cov=tests/team/unit --cov=tests/team/fixtures --cov-branch --cov-report=term-missing
+# Execute unit tests and verify statement and branch coverage on Frappe CRM core logic
+pytest tests/team/unit/ -v --cov=crm.fcrm.doctype.crm_deal.crm_deal --cov=crm.fcrm.doctype.crm_lead.crm_lead --cov-branch --cov-report=term-missing
 ```
 
 #### 2. REST & RPC API Integration Testing

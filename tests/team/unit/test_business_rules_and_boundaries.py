@@ -63,6 +63,13 @@ def test_br01_equivalence_partitioning_currency(clean_db, value, is_valid):
         assert deal.deal_value >= 0
 
 
+def test_deal_currency_sub_cent_precision(clean_db):
+    """SURV-09: Verifies tight sub-cent negative precision boundary (-0.0001) is strictly rejected."""
+    deal = CRMDeal({"doctype": "CRM Deal", "status": "Qualification", "deal_value": -0.0001})
+    with pytest.raises(frappe.NonNegativeError):
+        deal.save()
+
+
 # ---------------------------------------------------------------------------
 # FR-SH-01: Cross-Workflow Relational Integrity & Persistence
 # ---------------------------------------------------------------------------

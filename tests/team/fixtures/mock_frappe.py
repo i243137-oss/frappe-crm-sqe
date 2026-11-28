@@ -485,6 +485,11 @@ class MockDatabase:
     def get_single_value(self, doctype: str, fieldname: str) -> Any:
         return self.single_values.get(doctype, {}).get(fieldname)
 
+    def set_single_value(self, doctype: str, fieldname: str, value: Any):
+        if doctype not in self.single_values:
+            self.single_values[doctype] = {}
+        self.single_values[doctype][fieldname] = value
+
     def set_value(self, doctype: str, name: str, fieldname: Any, value: Any = None, update_modified: bool = True):
         if doctype in self.tables and name in self.tables[doctype]:
             if isinstance(fieldname, dict):

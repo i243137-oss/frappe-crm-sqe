@@ -23,10 +23,11 @@ from crm.fcrm.doctype.crm_deal.crm_deal import CRMDeal, create_deal
 
 
 class APIResponse:
-    def __init__(self, status_code: int, json_data: Any = None, text: str = ""):
+    def __init__(self, status_code: int, json_data: Any = None, text: str = "", headers: Dict[str, str] = None):
         self.status_code = status_code
         self._json = json_data or {}
         self.text = text or str(json_data)
+        self.headers = headers or {}
 
     def json(self) -> Dict[str, Any]:
         return self._json
@@ -34,6 +35,29 @@ class APIResponse:
     @property
     def ok(self) -> bool:
         return 200 <= self.status_code < 300
+
+    @property
+    def cookies(self) -> Dict[str, Dict[str, Any]]:
+        """Parses Set-Cookie headers into structured attributes."""
+        cookie_header = self.headers.get("Set-Cookie", "")
+        if not cookie_header:
+            return {}
+        result = {}
+        # Simple parse of Set-Cookie directives
+        parts = [p.strip() for p in cookie_header.split(";")]
+        if parts:
+            name_val = parts[0].split("=", 1)
+            cookie_name = name_val[0]
+            cookie_val = name_val[1] if len(name_val) > 1 else ""
+            flags = {
+                "value": cookie_val,
+                "httponly": any(p.lower() == "httponly" for p in parts),
+                "secure": any(p.lower() == "secure" for p in parts),
+                "samesite": next((p.split("=")[1] for p in parts if p.lower().startswith("samesite=")), None),
+                "path": next((p.split("=")[1] for p in parts if p.lower().startswith("path=")), None),
+            }
+            result[cookie_name] = flags
+        return result
 
 
 class FrappeAPIClient:
@@ -48,6 +72,21 @@ class FrappeAPIClient:
             return r.status_code == 200
         except Exception:
             return False
+
+    def login(self, usr: str = "Administrator", pwd: str = "admin") -> APIResponse:
+        """Executes an authentication request and receives session cookies."""
+        if self._use_live:
+            try:
+                res = requests.post(f"{self.base_url}/api/method/login", data={"usr": usr, "pwd": pwd})
+                return APIResponse(res.status_code, res.json() if res.text else {}, res.text, dict(res.headers))
+            except Exception as e:
+                return APIResponse(500, {"error": str(e)}, str(e))
+        # Simulated authentication response conforming to Frappe security specs
+        headers = {
+            "Content-Type": "application/json",
+            "Set-Cookie": "sid=frappe_sess_9a8b7c6d5e4f3a2b1c0d; HttpOnly; Secure; SameSite=Lax; Path=/",
+        }
+        return APIResponse(200, {"message": "Logged In", "home_page": "/app"}, "Logged In", headers)
 
     def post(self, endpoint: str, data: Dict[str, Any] = None) -> APIResponse:
         data = data or {}

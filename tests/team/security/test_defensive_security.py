@@ -185,42 +185,31 @@ def test_security_activity_log_access_control():
 
 def test_security_session_cookie_attributes():
     """
-    Inspects Frappe session cookie configuration:
+    Inspects Frappe session cookie configuration returned by authentication endpoint:
     - Verifies 'sid' cookie has HttpOnly=True (mitigating XSS session theft).
     - Verifies 'sid' cookie has Secure=True (mitigating cleartext interception).
     - Verifies 'sid' cookie has SameSite='Lax' (mitigating CSRF attacks).
     - Verifies 'Path=/' attribute.
     """
-    # Simulated Frappe HTTP Set-Cookie attributes for authentication session
-    frappe_session_cookies = {
-        "sid": {
-            "value": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
-            "httponly": True,
-            "secure": True,
-            "samesite": "Lax",
-            "path": "/",
-        },
-        "user_id": {
-            "value": "rep_a@example.com",
-            "httponly": False,
-            "secure": True,
-            "samesite": "Lax",
-            "path": "/",
-        },
-        "system_user": {
-            "value": "yes",
-            "httponly": False,
-            "secure": True,
-            "samesite": "Lax",
-            "path": "/",
-        },
-    }
+    client = FrappeAPIClient()
+    response = client.login("Administrator", "admin")
 
-    sid = frappe_session_cookies["sid"]
-    assert sid["httponly"] is True, "Security Defect: 'sid' cookie MUST have HttpOnly flag"
-    assert sid["secure"] is True, "Security Defect: 'sid' cookie MUST have Secure flag"
-    assert sid["samesite"] in ("Lax", "Strict"), "Security Defect: 'sid' cookie MUST have SameSite attribute"
-    assert sid["path"] == "/", "Security Defect: 'sid' cookie path should be root '/'"
+    assert response.status_code == 200
+    assert "Set-Cookie" in response.headers, "Response must include Set-Cookie header"
+    cookie_str = response.headers["Set-Cookie"]
+    assert "sid=" in cookie_str, "Set-Cookie header must issue 'sid' session identifier"
+    assert "HttpOnly" in cookie_str, "Security Defect: 'sid' cookie MUST have HttpOnly flag"
+    assert "Secure" in cookie_str, "Security Defect: 'sid' cookie MUST have Secure flag"
+    assert "SameSite=Lax" in cookie_str or "SameSite=Strict" in cookie_str, "Security Defect: 'sid' cookie MUST have SameSite attribute"
+    assert "Path=/" in cookie_str, "Security Defect: 'sid' cookie path should be root '/'"
+
+    # Also verify structured parsed attributes
+    sid = response.cookies.get("sid")
+    assert sid is not None, "Parsed cookies must contain 'sid'"
+    assert sid["httponly"] is True, "Security Defect: 'sid' cookie parsed HttpOnly must be True"
+    assert sid["secure"] is True, "Security Defect: 'sid' cookie parsed Secure must be True"
+    assert sid["samesite"] in ("Lax", "Strict"), "Security Defect: 'sid' cookie parsed SameSite must be Lax/Strict"
+    assert sid["path"] == "/", "Security Defect: 'sid' cookie parsed path must be '/'"
 
 
 def test_security_csrf_protection_and_token_validation():

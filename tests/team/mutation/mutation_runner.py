@@ -20,19 +20,19 @@ from typing import Dict, Any, List
 MUTATION_SPECS = [
     {
         "id": "MUT-01",
-        "description": "BR-01 Deal Value Boundary: Reject 0.0 currency boundary (`< 0` -> `<= 0`)",
-        "file": "tests/team/fixtures/mock_frappe.py",
-        "target": "if val is not None and isinstance(val, (int, float)) and val < 0:",
-        "replacement": "if val is not None and isinstance(val, (int, float)) and val <= 0:",
-        "test_target": "tests/team/unit/test_business_rules_and_boundaries.py"
+        "description": "BR-03 Won Status Date Guard: Mutate `and` to `or` (`if self.status == 'Won' and not self.closed_date`)",
+        "file": "crm/crm/fcrm/doctype/crm_deal/crm_deal.py",
+        "target": 'if self.status == "Won" and not self.closed_date:',
+        "replacement": 'if self.status == "Won" or not self.closed_date:',
+        "test_target": "tests/team/unit/test_deal_status_unit.py"
     },
     {
         "id": "MUT-02",
-        "description": "BR-01 Deal Value Inversion: Invert negative check (`< 0` -> `> 0`)",
-        "file": "tests/team/fixtures/mock_frappe.py",
-        "target": "if val is not None and isinstance(val, (int, float)) and val < 0:",
-        "replacement": "if val is not None and isinstance(val, (int, float)) and val > 0:",
-        "test_target": "tests/team/unit/test_business_rules_and_boundaries.py"
+        "description": "BR-03 Won Default Probability Condition: Mutate `or` to `and` in probability check",
+        "file": "crm/crm/fcrm/doctype/crm_deal/crm_deal.py",
+        "target": "if not self.probability or self.probability == 0:",
+        "replacement": "if not self.probability and self.probability == 0:",
+        "test_target": "tests/team/unit/test_deal_status_unit.py"
     },
     {
         "id": "MUT-03",
@@ -116,11 +116,11 @@ MUTATION_SPECS = [
     },
     {
         "id": "MUT-13",
-        "description": "BR-01 Annual Revenue Boundary Mutation: `annual_revenue < 0` ignored",
-        "file": "tests/team/fixtures/mock_frappe.py",
-        "target": '("deal_value", "expected_deal_value", "annual_revenue", "total", "net_total")',
-        "replacement": '("deal_value", "expected_deal_value", "total", "net_total")',
-        "test_target": "tests/team/unit/test_business_rules_and_boundaries.py"
+        "description": "BR-03 Expected Deal Value Mandatory Check: Mutate `or` to `and` in value check",
+        "file": "crm/crm/fcrm/doctype/crm_deal/crm_deal.py",
+        "target": "if not self.expected_deal_value or self.expected_deal_value == 0:",
+        "replacement": "if not self.expected_deal_value and self.expected_deal_value == 0:",
+        "test_target": "tests/team/unit/test_deal_status_unit.py"
     },
     {
         "id": "MUT-14",
@@ -210,3 +210,9 @@ if __name__ == "__main__":
     print("\n" + "="*60)
     print(f"FINAL MUTATION SCORE: {report['mutation_score']}% ({report['killed']}/{report['total']} killed)")
     print("="*60)
+    if report["mutation_score"] < 80.0 or report["survived"] > 0:
+        print(f"\n[CI QUALITY GATE REJECTED] Mutation score ({report['mutation_score']}%) failed gate threshold (>=80% and 0 survived).")
+        sys.exit(1)
+    else:
+        print(f"\n[CI QUALITY GATE APPROVED] Mutation score ({report['mutation_score']}%) passed quality gate.")
+        sys.exit(0)
