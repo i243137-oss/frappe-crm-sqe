@@ -10,13 +10,13 @@
 
 This report documents the design, execution, and outcomes of the **Mutation Testing and Continuous Integration Quality Gates** for Frappe CRM in compliance with the SE3002 syllabus specification.
 
-* **Target Mutation Engine:** Custom AST and token-level mutation engine ([`tests/team/mutation/mutation_runner.py`](tests/team/mutation/mutation_runner.py)).
+* **Target Mutation Engine:** Custom AST and token-level mutation engine ([`tests/team/mutation/mutation_runner.py`](../tests/team/mutation/mutation_runner.py)).
 * **Target Business Rules:** BR-01 (Currency boundary), BR-02 (Lost reason compound decision), BR-03 (Won state transition automation), BR-04 (Lead conversion eligibility & idempotency).
 * **Custom Mutation Operators Designed:** 4 custom operators (`OP-CURR-BOUND`, `OP-LOST-MCDC`, `OP-WON-DATE`, `OP-CONV-IDEMP`).
 * **Active Mutants Synthesized:** 16 targeted AST-level mutants across core business rules.
 * **Mutants Killed by Test Suite:** **16 / 16 (100.0%)**
 * **Surviving Mutants Analyzed:** **15 mutants** categorized into Missing Test, Weak Assertion, and Equivalent Mutant classes.
-* **Quality Gate Configuration:** GitHub Actions workflow [`.github/workflows/sqe_quality_gate.yml`](.github/workflows/sqe_quality_gate.yml) with zero tolerance for escape hatches (`continue-on-error`, `|| true`).
+* **Quality Gate Configuration:** GitHub Actions workflow [`.github/workflows/sqe_quality_gate.yml`](../.github/workflows/sqe_quality_gate.yml) with zero tolerance for escape hatches (`continue-on-error`, `|| true`).
 
 ---
 
@@ -112,7 +112,7 @@ The continuous integration pipeline is defined in `.github/workflows/sqe_quality
 
 ### 5.1 Enforced Quality Thresholds
 
-1. **Unit & Logic Tests:** 100% pass across 56 tests.
+1. **Unit & Logic Tests:** 100% pass across 73 tests.
 2. **Branch Coverage:** $\ge 80\%$ on business logic units (enforced via `--cov-fail-under=80`).
 3. **API & BVA Tests:** 100% pass across 24 tests.
 4. **Data Generator Integrity:** Validates OpenAPI 3.0 schema fixtures without error.
