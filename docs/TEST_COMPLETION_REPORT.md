@@ -11,7 +11,7 @@
 
 This **Test Completion Report** formalizes the conclusion of the software quality engineering activities for **Frappe CRM** (commit `678ed0d5c99097674ce45dbbc502d8d2afee927d`). It evaluates tested versus untested scope, documents operational deviations, summarizes residual risk across all 10 registered risks, validates the three measurable exit criteria, and delivers an evidence-grounded **Release Recommendation**.
 
-* **Overall Test Execution Status:** **107 / 107 Tests Passing (100% Pass Rate)**
+* **Overall Test Execution Status:** **125 / 125 Tests Passing (100% Pass Rate)**
 * **Server-Side Business Logic Coverage:** **100% Statement / 100% Branch Coverage**
 * **Mutation Score:** **100.0% of Killable Mutants Eliminated** (16/16 synthesized mutants killed, 15 survivors analyzed and resolved)
 * **Open Defects:** **0 Open Defects** (All 4 logged defects verified closed)
@@ -27,12 +27,13 @@ This **Test Completion Report** formalizes the conclusion of the software qualit
 | Component / Workflow | Verification Depth & Technique | Executed Tests & Evidence |
 | :--- | :--- | :---: |
 | **Workflow 1: Convert Lead to Deal** | Positive conversion, row locking, ineligibility checks, idempotency policies (`"Return Existing"`, `"Create"`, `"Fail"`), entity creation (Contact, Org). | **34 Unit/API/E2E Tests** |
-| **Workflow 2: Update Deal Status** | Status transitions to Won (closed date, probability) and Lost (MCC 10 rows, 4 MC/DC pairs, reason & notes validation), forecasting checks. | **38 Unit/API/E2E Tests** |
-| **Shared Relational Link Invariance** | Foreign key link `deal.lead == lead.name`, zero duplication, state retention across updates and reloads. | **12 Unit/API/Integration Tests** |
-| **Defensive Security & RBAC** | Access control matrix across `Sales Manager`, `Sales User`, and `Guest` (6 access decisions), session cookies, OWASP ZAP passive rules. | **7 Security Tests** |
+| **Workflow 2: Update Deal Status & State Transitions** | Status transitions to Won (closed date, probability) and Lost (MCC 10 rows, 4 MC/DC pairs, reason & notes validation), full State Transition Matrix (valid & disallowed transitions). | **52 Unit/API/E2E Tests** |
+| **Shared Relational Link Invariance** | Foreign key link `deal.lead == lead.name`, zero duplication, state retention across updates and reloads. | **17 Unit/API/Integration Tests** |
+| **Defensive Security & RBAC** | Access control matrix across `Sales Manager`, `Sales User`, and `Guest` (6 access decisions), session cookies, dependency security audit (`pip-audit`), OWASP ZAP passive rules. | **7 Security Tests** |
 | **Automated Test Data Generation** | Dynamic OpenAPI 3.0 generator producing 3-point BVA values and equivalence partitions; constraint mutation demonstration. | **4 Generator Tests** |
 | **Usability & Accessibility** | axe-core WCAG 2.1 AA scans, keyboard navigation (Escape modal dismissal, tab order), target sizing, Lighthouse 100/100. | **7 a11y Tests** |
-| **Performance & Recovery** | k6 load benchmarks at 1 VU & 5 VUs (13,199 requests, $p95 = 1.6\text{--}4.4\text{ ms}$), transactional fault recovery with atomic rollback. | **4 Load Runs + 3 Recovery Tests** |
+| **Performance & Recovery** | k6 load benchmarks at 1 VU & 5 VUs (13,199 requests, $p95 = 1.6\text{--}4.4\text{ ms}$), transactional fault recovery with mid-transaction atomic rollback. | **4 Load Runs + 4 Recovery Tests** |
+| **Total Automated Pytest Suite** | Comprehensive multi-suite verification across unit, API, generator, E2E, a11y, security, and recovery modules. | **125 Automated Tests** |
 
 ### 2.2 Justified Untested Scope & Exclusions
 
@@ -82,7 +83,7 @@ Following the successful execution of all test suites and remediation of all 4 d
 
 | Exit Criterion | Target Requirement | Measured System Outcome | Evaluation Status |
 | :--- | :--- | :--- | :---: |
-| **EC-01: Functional & Mutation** | 100% test pass rate across all suites; $\ge 80\%$ mutation score on killable mutants. | **107/107 tests passed (100%)**;<br>**100.0% mutation score** (16/16 killed). | **MET** |
+| **EC-01: Functional & Mutation** | 100% test pass rate across all suites; $\ge 80\%$ mutation score on killable mutants. | **125/125 tests passed (100%)**;<br>**100.0% mutation score** (16/16 killed). | **MET** |
 | **EC-02: Defensive Security** | 0 Critical/High RBAC bypasses; 0 High-Risk passive scan vulnerabilities. | **6 RBAC decisions verified** (0 bypasses);<br>**0 High/Critical findings** in ZAP passive scan. | **MET** |
 | **EC-03: Performance & Reliability** | $p95 \le 500\text{ ms}$; unexpected failures $< 1.0\%$ across 1 VU and 5 VUs. | **$p95 = 1.60\text{--}4.36\text{ ms}$** ($< 1\%$ of threshold);<br>**0.00% failures** across 13,199 requests. | **MET** |
 

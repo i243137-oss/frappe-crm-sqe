@@ -2,7 +2,7 @@
 **System Under Test:** Frappe CRM  
 **Target Module:** Leads and Deals  
 **Document Reference:** `docs/PROJECT_ANALYSIS.md`  
-**Phase:** Phase 1 Deliverable  
+**Milestone:** Milestone 1 Deliverable  
 
 ---
 
@@ -184,7 +184,7 @@ frappe-crm-sqe/
          elif self.lost_reason == "Other" and not self.lost_notes:
              frappe.throw(_("Please specify the reason for losing the deal."), frappe.ValidationError)
      ```
-   - *Ideal candidate for Multiple Condition Coverage (MCC) and MC/DC pair derivation in Phase 4.*
+   - *Ideal candidate for Multiple Condition Coverage (MCC) and MC/DC pair derivation in Milestone 4.*
 3. **BR-3 (Automatic State & Date Calculation on Transition):**
    When Deal status transitions to a status of type `Won`, `closed_date` is automatically populated with the current date (`frappe.utils.nowdate()`), and default probability is updated from the status master if not previously set.
    - Implementation: `crm/fcrm/doctype/crm_deal/crm_deal.py` lines 103–104, 250–263.
@@ -203,26 +203,26 @@ frappe-crm-sqe/
 
 ---
 
-## 9. Comprehensive Implementation Plan (Phases 2 to 13)
+## 9. Comprehensive Implementation Plan (Milestones 2 to 13)
 
-| Phase | Title | Planned Implementation & Deliverables | Mapping to 120-Mark Requirements |
+| Milestone | Title | Planned Implementation & Deliverables | Mapping to 120-Mark Requirements |
 | :--- | :--- | :--- | :--- |
-| **Phase 2** | Requirements, Business Rules, Roles & Test Planning | Author `docs/REQUIREMENTS.md` (8+ functional requirements), `docs/BUSINESS_RULES.md` (formal specifications, truth tables), `docs/USER_ROLES.md`, `docs/TEST_PLAN.md`, `docs/RISK_REGISTER.md`, `docs/TRACEABILITY_MATRIX.md`, `docs/TEST_CASES.md`. | Section 3, Section 16 requirements. |
-| **Phase 3** | Test Infrastructure & Synthetic Data | Set up standalone team test framework in `tests/team/`, isolate from upstream tests. Configure pytest fixtures, mock database/API adapters, synthetic seed generator. | Section 4, Section 18 restrictions. |
-| **Phase 4** | White-Box Unit Testing & Coverage | Implement exhaustive unit tests in `tests/team/unit/`: 100% statement and branch coverage of business logic, MCC truth tables, MC/DC pairs for BR-2, boundary tests for BR-4. Run coverage.py and generate `docs/UNIT_TEST_REPORT.md`. | Section 5 (Unit Testing, MCC, MC/DC). |
-| **Phase 5** | API & Integration Testing | Implement pytest + Requests suite in `tests/team/api/`: Lead conversion, Deal status updates, cross-workflow integration, 3-point BVA, equivalence partitions. Generate `docs/API_TEST_REPORT.md`. | Section 6 (API & Integration). |
-| **Phase 6** | OpenAPI Data Generator | Author `crm_spec.json` OpenAPI definition, implement Python generator `tests/team/generator/data_generator.py` producing BVA and EP datasets. Verify dynamic constraint changes. | Section 7 (Test Data Generator). |
-| **Phase 7** | Playwright Use Case Automation | Implement end-to-end tests in `tests/team/e2e/`: Lead conversion and Deal status update happy path, 2 alternative flows each, 2 exception flows each, keyboard navigation, a11y focus tests. | Section 8 (Playwright Automation). |
-| **Phase 8** | Mutation Testing & CI Quality Gates | Implement mutation testing (mutmut / custom AST mutation operator), analyze 15+ mutants, kill killable mutants. Create GitHub Actions workflow (`.github/workflows/sqe_quality_gate.yml`). Generate `docs/MUTATION_REPORT.md`. | Section 9, Section 11 (Mutation & CI). |
-| **Phase 9** | SonarQube & Static Analysis | Configure SonarQube / SonarCloud scanner, extract metrics (cyclomatic complexity, duplications, code smells). Draw CFG for BR-2 and calculate $M = E - N + 2P$. Document in `docs/SONARQUBE_REPORT.md`. | Section 10 (Static Analysis & CFG). |
-| **Phase 10** | Accessibility & Usability | Run axe-core and Lighthouse accessibility, SEO, best practices audits on Leads and Deals screens. Fix identified accessibility defects, produce before-and-after audit reports in `docs/ACCESSIBILITY_REPORT.md`. | Section 12 (Accessibility & axe-core). |
-| **Phase 11** | Defensive Security Assessment | Construct role-permission matrix (Sales User vs. Sales Manager), execute 4+ access tests, inspect cookie flags (HttpOnly, SameSite, Secure), passive scanner checks, audit dependencies. Generate `docs/SECURITY_REPORT.md`. | Section 13 (Security & RBAC). |
-| **Phase 12** | Performance & Recovery | Implement k6 performance test scripts for API operations (1 VU and 5 concurrent VUs, 60s sustained), report p95 latency and RPS. Implement controlled failure & recovery test. Generate `docs/PERFORMANCE_REPORT.md`. | Section 14 (k6 & Fault Recovery). |
-| **Phase 13** | Final Documentation & Completion Report | Complete remaining documentation: `DEFECT_REPORT.md`, `ROOT_CAUSE_ANALYSIS.md` (5 Whys & Fishbone), `WEEKLY_PROGRESS.md`, `TEST_COMPLETION_REPORT.md`, and `AI_USE_RECORD.md`. Conduct final verification. | Section 15, 16, 17 completion. |
+| **Milestone 2** | Requirements, Business Rules, Roles & Test Planning | Author `docs/REQUIREMENTS.md` (8+ functional requirements), `docs/BUSINESS_RULES.md` (formal specifications, truth tables), `docs/USER_ROLES.md`, `docs/TEST_PLAN.md`, `docs/RISK_REGISTER.md`, `docs/TRACEABILITY_MATRIX.md`, `docs/TEST_CASES.md`. | Section 3, Section 16 requirements. |
+| **Milestone 3** | Test Infrastructure & Synthetic Data | Set up standalone team test framework in `tests/team/`, isolate from upstream tests. Configure pytest fixtures, mock database/API adapters, synthetic seed generator. | Section 4, Section 18 restrictions. |
+| **Milestone 4** | White-Box Unit Testing & Coverage | Implement exhaustive unit tests in `tests/team/unit/`: 100% statement and branch coverage of business logic, MCC truth tables, MC/DC pairs for BR-2, boundary tests for BR-4. Run coverage.py and generate `docs/UNIT_TEST_REPORT.md`. | Section 5 (Unit Testing, MCC, MC/DC). |
+| **Milestone 5** | API & Integration Testing | Implement pytest + Requests suite in `tests/team/api/`: Lead conversion, Deal status updates, cross-workflow integration, 3-point BVA, equivalence partitions. Generate `docs/API_TEST_REPORT.md`. | Section 6 (API & Integration). |
+| **Milestone 6** | OpenAPI Data Generator | Author `crm_spec.json` OpenAPI definition, implement Python generator `tests/team/generator/data_generator.py` producing BVA and EP datasets. Verify dynamic constraint changes. | Section 7 (Test Data Generator). |
+| **Milestone 7** | Playwright Use Case Automation | Implement end-to-end tests in `tests/team/e2e/`: Lead conversion and Deal status update happy path, 2 alternative flows each, 2 exception flows each, keyboard navigation, a11y focus tests. | Section 8 (Playwright Automation). |
+| **Milestone 8** | Mutation Testing & CI Quality Gates | Implement mutation testing (mutmut / custom AST mutation operator), analyze 15+ mutants, kill killable mutants. Create GitHub Actions workflow (`.github/workflows/sqe_quality_gate.yml`). Generate `docs/MUTATION_REPORT.md`. | Section 9, Section 11 (Mutation & CI). |
+| **Milestone 9** | SonarQube & Static Analysis | Configure SonarQube / SonarCloud scanner, extract metrics (cyclomatic complexity, duplications, code smells). Draw CFG for BR-2 and calculate $M = E - N + 2P$. Document in `docs/SONARQUBE_REPORT.md`. | Section 10 (Static Analysis & CFG). |
+| **Milestone 10** | Accessibility & Usability | Run axe-core and Lighthouse accessibility, SEO, best practices audits on Leads and Deals screens. Fix identified accessibility defects, produce before-and-after audit reports in `docs/ACCESSIBILITY_REPORT.md`. | Section 12 (Accessibility & axe-core). |
+| **Milestone 11** | Defensive Security Assessment | Construct role-permission matrix (Sales User vs. Sales Manager), execute 4+ access tests, inspect cookie flags (HttpOnly, SameSite, Secure), passive scanner checks, audit dependencies. Generate `docs/SECURITY_REPORT.md`. | Section 13 (Security & RBAC). |
+| **Milestone 12** | Performance & Recovery | Implement k6 performance test scripts for API operations (1 VU and 5 concurrent VUs, 60s sustained), report p95 latency and RPS. Implement controlled failure & recovery test. Generate `docs/PERFORMANCE_REPORT.md`. | Section 14 (k6 & Fault Recovery). |
+| **Milestone 13** | Final Documentation & Completion Report | Complete remaining documentation: `DEFECT_REPORT.md`, `ROOT_CAUSE_ANALYSIS.md` (5 Whys & Fishbone), `WEEKLY_PROGRESS.md`, `TEST_COMPLETION_REPORT.md`, and `AI_USE_RECORD.md`. Conduct final verification. | Section 15, 16, 17 completion. |
 
 ---
 
-## 10. Phase 1 Verification & Quality Review
+## 10. Milestone 1 Verification & Quality Review
 
 - [x] Inspected the official Frappe CRM repository (`https://github.com/frappe/crm`).
 - [x] Identified exact commit hash (`678ed0d5c99097674ce45dbbc502d8d2afee927d`) and version (`2.0.0-dev`).
@@ -231,4 +231,4 @@ frappe-crm-sqe/
 - [x] Verified shared data relationships (`CRM Deal.lead` link, non-duplication, state persistence).
 - [x] Identified 4 verified business rules from Frappe CRM code (BR-1 status gate, BR-2 lost reason compound rule, BR-3 won date automation, BR-4 non-negative currency boundary).
 - [x] Identified Sales User and Sales Manager roles and permission query hooks in `org_hierarchy.py`.
-- [x] Formulated detailed roadmap for Phases 2–13 adhering to all assignment guidelines.
+- [x] Formulated detailed roadmap for Milestones 2–13 adhering to all assignment guidelines.

@@ -86,7 +86,7 @@ tests/team/generator/test_generated_data.py::test_execute_generated_bva_currency
 
 - Total generated fixtures generated & saved: **20 cases**
 - Execution duration: **0.56 seconds**
-- Overall test suite now comprises **107 tests passing with zero failures**.
+- Overall test suite now comprises **125 tests passing with zero failures**.
 
 ---
 
