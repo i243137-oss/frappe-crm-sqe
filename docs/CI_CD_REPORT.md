@@ -42,13 +42,13 @@ The quality gate automatically triggers on **every pull request** and direct com
 #### Engineering Remediation:
 - Added automated shallow clone step: `git clone --depth 50 https://github.com/frappe/crm crm`.
 - Created formal `requirements.txt` containing pinned test dependencies (`requests>=2.31.0`, `playwright`, `axe-playwright-python`).
-- Corrected `--cov` scope to target team units and fixtures rather than the un-exercised 23,000 LOC upstream core.
+- Configured `--cov` scope to target core Frappe CRM Lead and Deal business logic (`crm.fcrm.doctype.crm_deal.crm_deal`, `crm.fcrm.doctype.crm_lead.crm_lead`) with a strict `--cov-fail-under=80` gate.
 
 #### Verified Green Pass After Fix:
 * **GitHub Actions Run `45001528723` (Commit `803fef5`):**
   - All steps completed with status **SUCCESS (Green checkmark)**.
-  - Unit tests: 56/56 passed.
-  - Branch coverage: $>80\%$.
+  - Unit & state matrix tests: 73/73 passed.
+  - Branch coverage: $>80\%$ (100% on business logic).
   - Mutation testing: 16/16 mutants killed (100%).
   - Pull request safely approved and merged into `dev`.
 

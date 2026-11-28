@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-This report presents the in-depth **Root Cause Analysis (RCA)** performed on the major defects discovered during the quality engineering evaluation of Frappe CRM. Analysis was executed using the **5 Whys Methodology** and **Ishikawa (Fishbone) Diagrams**, followed by **Corrective and Preventive Actions (CAPA)** and a quantitative **Pareto Analysis** linking findings directly to the project Risk Register ([`docs/RISK_REGISTER.md`](docs/RISK_REGISTER.md)).
+This report presents the in-depth **Root Cause Analysis (RCA)** performed on the major defects discovered during the quality engineering evaluation of Frappe CRM. Analysis was executed using the **5 Whys Methodology** and **Ishikawa (Fishbone) Diagrams**, followed by **Corrective and Preventive Actions (CAPA)** and a quantitative **Pareto Analysis** linking findings directly to the project Risk Register ([`RISK_REGISTER.md`](RISK_REGISTER.md)).
 
 ---
 
@@ -117,10 +117,10 @@ flowchart LR
 
 | Defect ID | Corrective Action (Immediate Fix) | Preventive Action (Long-Term Invariant Enforcement) | Verification Method |
 | :---: | :--- | :--- | :--- |
-| **`DEF-01`** | Replaced `#16a34a` with deeper shade `#15803d` across `.btn-success` and `.toast.success`, boosting contrast to **4.97:1**. | Integrated `@axe-core/playwright` and Google Lighthouse audits into automated CI pipeline; blocked builds with contrast violations. | Automated axe-core regression suite ([`tests/team/a11y/`](tests/team/a11y/)) passing 7/7 tests. |
-| **`DEF-02`** | Enforced pessimistic row lock `lock_lead(for_update=True)` and checked `existing_deal()` under the `"Return Existing"` idempotency policy. | Standardized transactional state mutation patterns across all DocType lifecycle methods; added concurrency fault tests. | Concurrency & fault recovery suite ([`test_failure_and_recovery.py`](tests/team/performance/test_failure_and_recovery.py)) passing 3/3 tests. |
+| **`DEF-01`** | Replaced `#16a34a` with deeper shade `#15803d` across `.btn-success` and `.toast.success`, boosting contrast to **4.97:1**. | Integrated `@axe-core/playwright` and Google Lighthouse audits into automated CI pipeline; blocked builds with contrast violations. | Automated axe-core regression suite ([`tests/team/a11y/`](../tests/team/a11y/)) passing 7/7 tests. |
+| **`DEF-02`** | Enforced pessimistic row lock `lock_lead(for_update=True)` and checked `existing_deal()` under the `"Return Existing"` idempotency policy. | Standardized transactional state mutation patterns across all DocType lifecycle methods; added concurrency fault tests. | Concurrency & fault recovery suite ([`test_failure_and_recovery.py`](../tests/team/performance/test_failure_and_recovery.py)) passing 3/3 tests. |
 | **`DEF-03`** | Added shallow clone `git clone --depth 50` and pinned `requirements.txt` in GitHub Actions CI workflow. | Automated CI smoke check step that verifies module resolution before launching heavyweight tests. | CI Run `45001528723` executing cleanly across 10 verification stages. |
-| **`DEF-04`** | Hooked `validate_lost_reason()` directly into `CRMDeal.validate()` so all RPC and API writes are validated. | Mandated that state transition validations must reside in server-side Document controller hooks, never exclusively in UI view layers. | API test suite ([`test_deal_status_api.py`](tests/team/api/test_deal_status_api.py)) passing 7/7 tests. |
+| **`DEF-04`** | Hooked `validate_lost_reason()` directly into `CRMDeal.validate()` so all RPC and API writes are validated. | Mandated that state transition validations must reside in server-side Document controller hooks, never exclusively in UI view layers. | API test suite ([`test_deal_status_api.py`](../tests/team/api/test_deal_status_api.py)) passing 7/7 tests. |
 
 ---
 
