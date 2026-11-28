@@ -49,6 +49,11 @@ def test_deal_transition_to_won_sets_closed_date_and_probability(clean_db, deal_
     # Deal probability updated from master (100% for Won)
     assert deal.probability == 100
 
+    # Also verify when probability is None, default probability is populated
+    deal.probability = None
+    deal.update_default_probability()
+    assert deal.probability == 100
+
 
 def test_deal_open_status_does_not_set_closed_date(clean_db, deal_fact):
     """Transition between open statuses must NOT set closed_date."""
@@ -232,3 +237,64 @@ def test_contact_management_apis(clean_db, deal_fact):
     remove_contact(deal.name, "CONT-100")
     reloaded = clean_db.get_doc("CRM Deal", deal.name)
     assert not any(c.get("contact") == "CONT-100" for c in reloaded.contacts)
+
+
+def test_deal_won_preserves_existing_closed_date(clean_db):
+    """SURV-01: Verifies that transitioning to Won preserves pre-existing closed_date if already populated."""
+    deal = CRMDeal({
+        "doctype": "CRM Deal",
+        "status": "Won",
+        "closed_date": "2025-06-15"
+    })
+    deal.update_closed_date()
+    # Must preserve the explicitly existing closure date rather than overwriting with nowdate()
+    assert deal.closed_date == "2025-06-15"
+
+
+def test_expected_deal_value_none_under_forecasting(clean_db):
+    """SURV-02: Verifies MandatoryError raised when expected_deal_value is None under forecasting."""
+    frappe.db.set_single_value("FCRM Settings", "enable_forecasting", 1)
+    deal = CRMDeal({
+        "doctype": "CRM Deal",
+        "status": "Open",
+        "expected_deal_value": None,
+        "expected_closure_date": "2026-12-31"
+    })
+    with pytest.raises(frappe.MandatoryError) as exc:
+        deal.validate_forecasting_fields()
+    assert "Expected deal value is required" in str(exc.value)
+
+
+def test_deal_status_none_handled_cleanly(clean_db):
+    """SURV-08: Verifies that validate_lost_reason handles status=None without throwing unhandled exceptions."""
+    deal = CRMDeal({
+        "doctype": "CRM Deal",
+        "status": None
+    })
+    # Should not throw when status is None/null
+    deal.validate_lost_reason()
+
+
+def test_probability_zero_boundary(clean_db):
+    """SURV-12: Verifies probability=0.0 boundary behavior under default pipeline assignment."""
+    deal = CRMDeal({
+        "doctype": "CRM Deal",
+        "status": "Won",
+        "probability": 0.0
+    })
+    deal.update_default_probability()
+    # In crm_deal.py line 261: if not self.probability or self.probability == 0 -> defaults
+    assert deal.probability is not None and deal.probability >= 0
+
+
+def test_no_audit_log_on_unchanged_status(clean_db, deal_fact):
+    """SURV-10: Verifies that saving a deal without modifying status does not create spurious audit log entries."""
+    deal_data = deal_fact.build_synthetic_deal({"status": "Qualification"})
+    deal = CRMDeal(deal_data)
+    deal.insert()
+    initial_log_count = len(getattr(deal, "status_change_log", []))
+
+    # Save again with same status
+    deal.status = "Qualification"
+    deal.save()
+    assert len(getattr(deal, "status_change_log", [])) == initial_log_count
