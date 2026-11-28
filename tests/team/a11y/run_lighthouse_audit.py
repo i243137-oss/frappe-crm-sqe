@@ -19,8 +19,37 @@ import socketserver
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 from tests.team.e2e.mock_server import MockCRMHandler, PORT
 
-CHROME_EXE = r"C:\Users\uh723\AppData\Local\ms-playwright\chromium-1255\chrome-win64\chrome.exe"
-LIGHTHOUSE_CLI = r"C:\Users\uh723\AppData\Roaming\npm\lighthouse.cmd"
+import shutil
+
+def resolve_chrome_executable():
+    env_chrome = os.environ.get("CHROME_PATH")
+    if env_chrome and os.path.exists(env_chrome):
+        return env_chrome
+    for candidate in [
+        shutil.which("chrome"),
+        shutil.which("google-chrome"),
+        shutil.which("chromium"),
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+    ]:
+        if candidate and os.path.exists(candidate):
+            return candidate
+    return shutil.which("chrome") or "chrome"
+
+def resolve_lighthouse_cli():
+    env_lh = os.environ.get("LIGHTHOUSE_PATH")
+    if env_lh and os.path.exists(env_lh):
+        return env_lh
+    lh_which = shutil.which("lighthouse")
+    if lh_which:
+        return lh_which
+    npm_roaming = os.path.expandvars(r"%APPDATA%\npm\lighthouse.cmd")
+    if os.path.exists(npm_roaming):
+        return npm_roaming
+    return "lighthouse"
+
+CHROME_EXE = resolve_chrome_executable()
+LIGHTHOUSE_CLI = resolve_lighthouse_cli()
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "docs", "lighthouse")
 
 

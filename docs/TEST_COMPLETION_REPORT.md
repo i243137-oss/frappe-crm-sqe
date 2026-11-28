@@ -51,8 +51,8 @@ In accordance with SQE standards, non-critical peripheral modules were excluded 
 
 | Planned Activity | Test Plan Specification | Actual Operational Deviation | Engineering Rationale & Impact |
 | :--- | :--- | :--- | :--- |
-| **E2E UI Test Runner Host** | Local Frappe Bench Server | Standalone Headless Mock Server ([`mock_server.py`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/tests/team/e2e/mock_server.py)) | Syllabus explicitly permitted: *"Fix one screen (in the MIS or as your own HTML page)"*. Standalone server eliminates flaky bench background services while accurately rendering the identical Vue DOM elements. |
-| **Mutation Testing Tool** | General `mutmut` CLI | Custom AST Mutation Engine ([`mutation_runner.py`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/tests/team/mutation/mutation_runner.py)) | Enabled strict targeting of custom business rule operators (`OP-CURR-BOUND`, `OP-LOST-MCDC`, etc.) and exact 15 surviving mutant analysis. |
+| **E2E UI Test Runner Host** | Local Frappe Bench Server | Standalone Headless Mock Server ([`mock_server.py`](tests/team/e2e/mock_server.py)) | Syllabus explicitly permitted: *"Fix one screen (in the MIS or as your own HTML page)"*. Standalone server eliminates flaky bench background services while accurately rendering the identical Vue DOM elements. |
+| **Mutation Testing Tool** | General `mutmut` CLI | Custom AST Mutation Engine ([`mutation_runner.py`](tests/team/mutation/mutation_runner.py)) | Enabled strict targeting of custom business rule operators (`OP-CURR-BOUND`, `OP-LOST-MCDC`, etc.) and exact 15 surviving mutant analysis. |
 | **Test Effort Variance** | Estimated $146.5\text{ hours}$ | Actual $152.0\text{ hours}$ | $+3.75\%$ variance; within standard $\pm 10\%$ estimation buffer. |
 
 ---

@@ -135,6 +135,11 @@ def test_keyboard_navigation_and_tab_order(page):
     focused_id = page.evaluate("() => document.activeElement.id")
     assert focused_id == "btn-modal-submit"
 
+    # Submit form entirely via keyboard (Enter key) per SQE keyboard navigation requirements
+    page.keyboard.press("Enter")
+    page.wait_for_selector("#deal-view", state="visible")
+    assert page.is_visible("#deal-view")
+
 
 def test_aria_form_labels_and_status_announcements(page):
     """Verifies proper form label associations and live region announcements."""

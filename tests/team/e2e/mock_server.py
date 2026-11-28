@@ -52,6 +52,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <div id="lead-view">
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
         <div>
+          <div style="margin-bottom: 6px;">
+            <label for="select-active-lead" style="display: inline; font-size: 12px; margin-right: 6px;">Active Lead:</label>
+            <select id="select-active-lead" onchange="switchLead(this.value)" style="width: auto; display: inline-block; padding: 2px 6px;">
+              <option value="open">CRM-LEAD-2026-00001 (Open)</option>
+              <option value="lost">CRM-LEAD-2026-00002 (Lost)</option>
+            </select>
+          </div>
           <h1 id="lead-title" style="margin-bottom: 4px;">CRM-LEAD-2026-00001</h1>
           <span id="lead-status" class="status-badge status-lead">Open</span>
         </div>
@@ -144,6 +151,18 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </main>
 
   <script>
+    function switchLead(val) {
+      if (val === 'lost') {
+        document.getElementById('lead-title').innerText = 'CRM-LEAD-2026-00002';
+        document.getElementById('lead-status').innerText = 'Lost';
+        document.getElementById('lead-status').className = 'status-badge status-lost';
+      } else {
+        document.getElementById('lead-title').innerText = 'CRM-LEAD-2026-00001';
+        document.getElementById('lead-status').innerText = 'Open';
+        document.getElementById('lead-status').className = 'status-badge status-lead';
+      }
+    }
+
     function showToast(msg, isError = false) {
       const t = document.getElementById('toast');
       t.innerText = msg;

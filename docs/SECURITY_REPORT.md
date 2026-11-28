@@ -33,7 +33,7 @@ Frappe CRM implements hierarchical role-based permissions combined with row-leve
 
 ## 3. Evaluated Access Decisions (Allowed & Denied)
 
-The automated test suite in [`tests/team/security/test_defensive_security.py`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/tests/team/security/test_defensive_security.py) executes six concrete authorization decisions across `Sales Manager`, `Sales User`, and `Guest`:
+The automated test suite in [`tests/team/security/test_defensive_security.py`](tests/team/security/test_defensive_security.py) executes six concrete authorization decisions across `Sales Manager`, `Sales User`, and `Guest`:
 
 ### Decision 1: Sales Manager Converts Unassigned / Any Lead (ALLOWED)
 * **Actor:** `manager@example.com` (Role: `Sales Manager`)
@@ -77,7 +77,7 @@ The automated test suite in [`tests/team/security/test_defensive_security.py`](f
 ## 4. In-Depth Security Controls Inspection
 
 ### 4.1 Lead Conversion Security Enforcement
-In [`crm/crm/fcrm/doctype/crm_lead/crm_lead.py`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/crm/crm/fcrm/doctype/crm_lead/crm_lead.py#L579-L584), conversion access is explicitly validated before state mutation or transaction initiation:
+In [`crm/crm/fcrm/doctype/crm_lead/crm_lead.py`](crm/crm/fcrm/doctype/crm_lead/crm_lead.py#L579-L584), conversion access is explicitly validated before state mutation or transaction initiation:
 ```python
 def validate_conversion_access(lead: str, doc: Document | None = None):
     if doc and doc.flags.get("ignore_permissions"):
@@ -88,7 +88,7 @@ def validate_conversion_access(lead: str, doc: Document | None = None):
 Simultaneously, `lock_lead(lead)` executes `SELECT ... FOR UPDATE` via QueryBuilder, preventing race conditions and TOCTOU (Time-of-Check to Time-of-Use) concurrency vulnerabilities during high-frequency conversion requests.
 
 ### 4.2 Deal Status Update & Audit Log Integrity
-Status updates require write authorization verified by `check_permission("write")`. Furthermore, status transitions automatically generate tamper-evident audit records in `CRM Status Change Log` ([`crm_status_change_log.py`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/crm/crm/fcrm/doctype/crm_status_change_log/crm_status_change_log.py)). Sales users cannot directly edit, backdate, or delete historical status logs.
+Status updates require write authorization verified by `check_permission("write")`. Furthermore, status transitions automatically generate tamper-evident audit records in `CRM Status Change Log` ([`crm_status_change_log.py`](crm/crm/fcrm/doctype/crm_status_change_log/crm_status_change_log.py)). Sales users cannot directly edit, backdate, or delete historical status logs.
 
 ### 4.3 Session Cookie Security Attributes
 Frappe CRM manages authentication sessions using browser cookies configured via `frappe.auth.LoginManager`:
@@ -106,7 +106,7 @@ State-changing API operations (HTTP `POST`, `PUT`, `DELETE`) require verificatio
 
 ## 5. OWASP ZAP Passive Scan Analysis
 
-During browser and API execution, network traffic was captured and analyzed by the automated OWASP ZAP Passive Scanner ([`tests/team/security/zap_passive_scanner.py`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/tests/team/security/zap_passive_scanner.py)). The scan output is serialized in [`docs/security/zap_passive_scan_report.json`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/docs/security/zap_passive_scan_report.json).
+During browser and API execution, network traffic was captured and analyzed by the automated OWASP ZAP Passive Scanner ([`tests/team/security/zap_passive_scanner.py`](tests/team/security/zap_passive_scanner.py)). The scan output is serialized in [`docs/security/zap_passive_scan_report.json`](docs/security/zap_passive_scan_report.json).
 
 ### Finding Summary by Risk Level
 * **High Risk:** **0**
@@ -157,7 +157,7 @@ During browser and API execution, network traffic was captured and analyzed by t
 
 A formal software bill of materials (SBOM) and dependency audit was performed on both backend and frontend package manifests:
 
-### 6.1 Python Dependencies ([`requirements.txt`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/requirements.txt))
+### 6.1 Python Dependencies ([`requirements.txt`](requirements.txt))
 * **Audit Tool:** `pip-audit` / PyPI Advisory Database
 * **Result:** **0 Known Vulnerabilities Detected**
 * **Verification Highlights:**
@@ -165,7 +165,7 @@ A formal software bill of materials (SBOM) and dependency audit was performed on
   - `playwright >= 1.65.2`: Uses sandboxed Chromium browser binaries with modern V8 security mitigations.
   - `pyyaml >= 6.0.3`: Protects against arbitrary code execution vulnerabilities present in outdated PyYAML versions.
 
-### 6.2 Frontend Dependencies ([`crm/frontend/package.json`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/crm/frontend/package.json))
+### 6.2 Frontend Dependencies ([`crm/frontend/package.json`](crm/frontend/package.json))
 * **Audit Tool:** Static manifest review
 * **Verification Highlights:**
   - `dompurify ^3.3.3`: Industry-standard XSS sanitizer actively purifying HTML notes and communication bodies before rendering.

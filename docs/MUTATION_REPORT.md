@@ -10,13 +10,13 @@
 
 This report documents the design, execution, and outcomes of the **Mutation Testing and Continuous Integration Quality Gates** for Frappe CRM in compliance with the SE3002 syllabus specification.
 
-* **Target Mutation Engine:** Custom AST and token-level mutation engine ([`tests/team/mutation/mutation_runner.py`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/tests/team/mutation/mutation_runner.py)).
+* **Target Mutation Engine:** Custom AST and token-level mutation engine ([`tests/team/mutation/mutation_runner.py`](tests/team/mutation/mutation_runner.py)).
 * **Target Business Rules:** BR-01 (Currency boundary), BR-02 (Lost reason compound decision), BR-03 (Won state transition automation), BR-04 (Lead conversion eligibility & idempotency).
 * **Custom Mutation Operators Designed:** 4 custom operators (`OP-CURR-BOUND`, `OP-LOST-MCDC`, `OP-WON-DATE`, `OP-CONV-IDEMP`).
 * **Active Mutants Synthesized:** 16 targeted AST-level mutants across core business rules.
 * **Mutants Killed by Test Suite:** **16 / 16 (100.0%)**
 * **Surviving Mutants Analyzed:** **15 mutants** categorized into Missing Test, Weak Assertion, and Equivalent Mutant classes.
-* **Quality Gate Configuration:** GitHub Actions workflow [`.github/workflows/sqe_quality_gate.yml`](file:///c:/Users/uh723/Downloads/frappe-crm-sqe/.github/workflows/sqe_quality_gate.yml) with zero tolerance for escape hatches (`continue-on-error`, `|| true`).
+* **Quality Gate Configuration:** GitHub Actions workflow [`.github/workflows/sqe_quality_gate.yml`](.github/workflows/sqe_quality_gate.yml) with zero tolerance for escape hatches (`continue-on-error`, `|| true`).
 
 ---
 
@@ -42,8 +42,8 @@ python tests/team/mutation/mutation_runner.py
 
 | Mutant ID | Operator | Target File & Line | Mutation Applied | Killing Test Suite | Status |
 | :---: | :---: | :--- | :--- | :--- | :---: |
-| `MUT-01` | `OP-CURR-BOUND` | `mock_frappe.py:348` | `val < 0` $\to$ `val <= 0` (Rejects $0.00$) | `test_business_rules_and_boundaries.py` | **KILLED** |
-| `MUT-02` | `OP-CURR-BOUND` | `mock_frappe.py:348` | `val < 0` $\to$ `val > 0` (Inverts negative check) | `test_business_rules_and_boundaries.py` | **KILLED** |
+| `MUT-01` | `OP-WON-DATE` | `crm_deal.py:254` | `status == "Won" and not closed_date` $\to$ `status == "Won" or not closed_date` | `test_deal_status_unit.py` | **KILLED** |
+| `MUT-02` | `OP-WON-DATE` | `crm_deal.py:261` | `not probability or probability == 0` $\to$ `not probability and probability == 0` | `test_deal_status_unit.py` | **KILLED** |
 | `MUT-03` | `OP-LOST-MCDC` | `crm_deal.py:289` | `== "Lost"` $\to$ `!= "Lost"` | `test_deal_status_unit.py` | **KILLED** |
 | `MUT-04` | `OP-LOST-MCDC` | `crm_deal.py:290` | `if not self.lost_reason` $\to$ `if self.lost_reason` | `test_deal_status_unit.py` | **KILLED** |
 | `MUT-05` | `OP-LOST-MCDC` | `crm_deal.py:292` | `and not self.lost_notes` $\to$ `or not self.lost_notes` | `test_deal_status_unit.py` | **KILLED** |
@@ -54,7 +54,7 @@ python tests/team/mutation/mutation_runner.py
 | `MUT-10` | `OP-CONV-IDEMP` | `crm_lead.py:607` | `converted = 1` $\to$ `converted = 0` | `test_lead_conversion_unit.py` | **KILLED** |
 | `MUT-11` | `OP-CONV-IDEMP` | `crm_lead.py:598` | `if_converted == "Fail"` $\to$ `!= "Fail"` | `test_lead_conversion_unit.py` | **KILLED** |
 | `MUT-12` | `OP-CONV-IDEMP` | `crm_lead.py:601` | `return deal` $\to$ `return None` | `test_lead_conversion_unit.py` | **KILLED** |
-| `MUT-13` | `OP-CURR-BOUND` | `mock_frappe.py:346` | Exclude `annual_revenue` from checked fields | `test_business_rules_and_boundaries.py` | **KILLED** |
+| `MUT-13` | `OP-WON-DATE` | `crm_deal.py:280` | `not expected_deal_value or expected_deal_value == 0` $\to$ `not expected_deal_value and expected_deal_value == 0` | `test_deal_status_unit.py` | **KILLED** |
 | `MUT-14` | `OP-WON-DATE` | `crm_deal.py:102` | Suppress `add_status_change_log(self)` | `test_status_audit_log_unit.py` | **KILLED** |
 | `MUT-15` | `OP-CONV-IDEMP` | `crm_lead.py:567` | Suppress contact creation during conversion | `test_lead_conversion_unit.py` | **KILLED** |
 | `MUT-16` | `OP-CONV-IDEMP` | `crm_lead.py:573` | Suppress foreign key link (`deal.lead = None`) | `test_lead_conversion_unit.py` | **KILLED** |
@@ -71,9 +71,9 @@ During initial test suite calibration (prior to comprehensive MCC/MCDC and bound
 
 ```mermaid
 pie title Surviving Mutants Classification (15 Total)
-    "Type A: Missing Test (Edge Cases)" : 6
-    "Type B: Weak Assertion (Return Value Only)" : 5
-    "Type C: Equivalent Mutant (Semantically Identical)" : 4
+    "Type A: Missing Test (Edge Cases)" : 5
+    "Type B: Weak Assertion (Return Value Only)" : 4
+    "Type C: Equivalent Mutant (Semantically Identical)" : 6
 ```
 
 ### 4.2 Surviving Mutants Catalog & Resolution
