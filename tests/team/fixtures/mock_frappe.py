@@ -76,22 +76,40 @@ class QBField:
         self.name = name
 
     def isin(self, other):
-        return self
+        if hasattr(other, "get_sql"):
+            return QBCondition(f"`{self.name}` IN ({other.get_sql()})")
+        if isinstance(other, (list, tuple, set)):
+            vals = ", ".join(f"'{v}'" if isinstance(v, str) else str(v) for v in other)
+            return QBCondition(f"`{self.name}` IN ({vals})")
+        return QBCondition(f"`{self.name}` IN ({other})")
 
     def __eq__(self, other):
-        return self
+        val = f"'{other}'" if isinstance(other, str) else str(other)
+        return QBCondition(f"`{self.name}` = {val}")
 
     def __ne__(self, other):
-        return self
+        val = f"'{other}'" if isinstance(other, str) else str(other)
+        return QBCondition(f"`{self.name}` != {val}")
 
-    def __or__(self, other):
-        return self
+    def __str__(self):
+        return f"`{self.name}`"
+
+
+class QBCondition:
+    def __init__(self, expr: str):
+        self.expr = expr
 
     def __and__(self, other):
-        return self
+        return QBCondition(f"({self.expr} AND {other})")
+
+    def __or__(self, other):
+        return QBCondition(f"({self.expr} OR {other})")
 
     def get_sql(self, **kwargs):
-        return "1=1"
+        return self.expr
+
+    def __str__(self):
+        return self.expr
 
 
 class QBTable:
@@ -99,10 +117,10 @@ class QBTable:
         self.doctype_name = name
 
     def __getattr__(self, item: str):
-        return QBField(f"{self.doctype_name}.{item}")
+        return QBField(item)
 
     def __getitem__(self, item: str):
-        return QBField(f"{self.doctype_name}.{item}")
+        return QBField(item)
 
     def as_(self, alias: str):
         return self
@@ -128,11 +146,18 @@ class QBQuery:
     def limit(self, n: int):
         return self
 
-    def run(self):
-        return [{"name": "test-record"}]
+    def run(self, as_dict: bool = True):
+        table_name = getattr(self.table, "doctype_name", "CRM Lead")
+        records = mock_db.get_all(table_name)
+        return records if records else []
 
     def get_sql(self, **kwargs):
-        return "1=1"
+        fields = ", ".join(str(f) for f in self._select) if self._select else "*"
+        tbl = getattr(self.table, "doctype_name", "DocType")
+        sql = f"SELECT {fields} FROM `tab{tbl}`"
+        if self._where:
+            sql += f" WHERE {' AND '.join(str(w) for w in self._where)}"
+        return sql
 
 
 class QueryBuilderMock:

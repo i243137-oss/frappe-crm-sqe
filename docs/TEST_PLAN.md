@@ -2,7 +2,7 @@
 **System Under Test:** Frappe CRM  
 **Target Module:** Leads and Deals  
 **Document Reference:** `docs/TEST_PLAN.md`  
-**Phase:** Phase 2 Deliverable  
+**Milestone:** Milestone 2 Deliverable  
 
 ---
 
@@ -85,7 +85,7 @@ flowchart TD
 
 ## 4. Entry, Suspension & Exit Criteria
 
-### 4.1 Phase Entry Criteria
+### 4.1 Milestone Entry Criteria
 * Source code inspected, version controlled, and dependencies documented.
 * Clear functional requirements and formal business rule specifications established.
 * Isolated directory structure `tests/team/` configured.
@@ -94,7 +94,7 @@ flowchart TD
 * **Suspension:** Fatal environment corruption, database connection failure, or blocking dependency defect.
 * **Resumption:** Defect fixed and verified in sandbox environment.
 
-### 4.3 Phase Exit Criteria
+### 4.3 Milestone Exit Criteria
 * All planned test cases executed with recorded pass/fail results and evidence logs.
 * Target code coverage ($\ge 100\%$ on business logic units) achieved and justified.
 * All killable mutants eliminated.

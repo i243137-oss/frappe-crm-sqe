@@ -2,7 +2,7 @@
 **System Under Test:** Frappe CRM  
 **Target Module:** Leads and Deals  
 **Document Reference:** `docs/BUSINESS_RULES.md`  
-**Phase:** Phase 2 Deliverable  
+**Milestone:** Milestone 2 Deliverable  
 
 ---
 
