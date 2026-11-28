@@ -18,7 +18,7 @@ This report documents the performance evaluation, load benchmarking, and transac
 * **Total Measured Requests:** **13,199 requests** across all runs
 * **Observed Latency ($p95$):** **1.60 ms – 4.36 ms** (Against standard target limit: $\le 500\text{ ms}$)
 * **Unexpected Failure Rate:** **0.00%** (Against standard target limit: $< 1.0\%$)
-* **Failure-and-Recovery Verification:** Automated fault injection, atomic rollback, and retry idempotency verified in [`tests/team/performance/test_failure_and_recovery.py`](tests/team/performance/test_failure_and_recovery.py) (3/3 tests passed).
+* **Failure-and-Recovery Verification:** Automated fault injection, atomic rollback, and retry idempotency verified in [`tests/team/performance/test_failure_and_recovery.py`](../tests/team/performance/test_failure_and_recovery.py) (3/3 tests passed).
 
 ---
 
@@ -41,14 +41,14 @@ Before conducting performance testing, quantitative service-level thresholds wer
 * **Frappe CRM Version:** `2.0.0-dev` (Baseline Commit `678ed0d5c99097674ce45dbbc502d8d2afee927d`)
 * **Database / Backend Engine:** Python 3.12.2 / Frappe WSGI Server
 * **Load Test Tool:** Grafana k6 OSS (v0.50.0)
-* **Automation Runner:** [`tests/team/performance/run_k6_benchmarks.py`](tests/team/performance/run_k6_benchmarks.py)
-* **Test Script:** [`tests/team/performance/k6_lead_conversion.js`](tests/team/performance/k6_lead_conversion.js)
+* **Automation Runner:** [`tests/team/performance/run_k6_benchmarks.py`](../tests/team/performance/run_k6_benchmarks.py)
+* **Test Script:** [`tests/team/performance/k6_lead_conversion.js`](../tests/team/performance/k6_lead_conversion.js)
 * **Raw Benchmark Artifacts:**
-  - 1 VU Run 1: [`docs/performance/k6_1vu_run1.json`](docs/performance/k6_1vu_run1.json)
-  - 1 VU Run 2: [`docs/performance/k6_1vu_run2.json`](docs/performance/k6_1vu_run2.json)
-  - 5 VU Run 1: [`docs/performance/k6_5vu_run1.json`](docs/performance/k6_5vu_run1.json)
-  - 5 VU Run 2: [`docs/performance/k6_5vu_run2.json`](docs/performance/k6_5vu_run2.json)
-  - Consolidated Summary: [`docs/performance/k6_benchmark_summary.json`](docs/performance/k6_benchmark_summary.json)
+  - 1 VU Run 1: [`performance/k6_1vu_run1.json`](performance/k6_1vu_run1.json)
+  - 1 VU Run 2: [`performance/k6_1vu_run2.json`](performance/k6_1vu_run2.json)
+  - 5 VU Run 1: [`performance/k6_5vu_run1.json`](performance/k6_5vu_run1.json)
+  - 5 VU Run 2: [`performance/k6_5vu_run2.json`](performance/k6_5vu_run2.json)
+  - Consolidated Summary: [`performance/k6_benchmark_summary.json`](performance/k6_benchmark_summary.json)
 
 ---
 
@@ -84,7 +84,7 @@ xychart-beta
 
 ## 5. Controlled Fault Injection & Recovery Testing
 
-In compliance with project requirements, an automated controlled failure-and-recovery test suite was developed in [`tests/team/performance/test_failure_and_recovery.py`](tests/team/performance/test_failure_and_recovery.py).
+In compliance with project requirements, an automated controlled failure-and-recovery test suite was developed in [`tests/team/performance/test_failure_and_recovery.py`](../tests/team/performance/test_failure_and_recovery.py).
 
 ### 5.1 Fault Injection Architecture
 

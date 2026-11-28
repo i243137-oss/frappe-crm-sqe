@@ -1,12 +1,12 @@
 # Frappe CRM - Software Quality Engineering (SQE) Suite
 
 [![SQE CI Quality Gate](https://github.com/i243137-oss/frappe-crm-sqe/actions/workflows/sqe_quality_gate.yml/badge.svg)](https://github.com/i243137-oss/frappe-crm-sqe/actions/workflows/sqe_quality_gate.yml)
-[![Tests Passing](https://img.shields.io/badge/Tests-107%20Passed%20(100%25)-brightgreen.svg)]()
-[![Branch Coverage](https://img.shields.io/badge/Branch%20Coverage-100%25-brightgreen.svg)]()
-[![Mutation Score](https://img.shields.io/badge/Mutation%20Score-100%25%20(16%2F16%20Killed)-brightgreen.svg)]()
-[![Static Complexity](https://img.shields.io/badge/Radon%20Cyclomatic%20Complexity-Grade%20A%20(V(G)%3D7)-blue.svg)]()
-[![WCAG 2.1 AA](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA%20Compliant-success.svg)]()
-[![Performance SLA](https://img.shields.io/badge/p95%20Latency-%3C%204.5ms%20(SLA%20%3C300ms)-blue.svg)]()
+[![Tests Passing](https://img.shields.io/badge/Tests-139%20Passed%20%28100%25%29-brightgreen.svg)](docs/TEST_COMPLETION_REPORT.md)
+[![Branch Coverage](https://img.shields.io/badge/Branch%20Coverage-100%25-brightgreen.svg)](docs/UNIT_TEST_REPORT.md)
+[![Mutation Score](https://img.shields.io/badge/Mutation%20Score-100%25%20%2816%2F16%20Killed%29-brightgreen.svg)](docs/MUTATION_REPORT.md)
+[![Static Complexity](https://img.shields.io/badge/Radon%20Cyclomatic%20Complexity-Grade%20A%20%28V%28G%29%3D7%29-blue.svg)](docs/SONARQUBE_REPORT.md)
+[![WCAG 2.1 AA](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA%20Compliant-success.svg)](docs/ACCESSIBILITY_REPORT.md)
+[![Performance SLA](https://img.shields.io/badge/p95%20Latency-%3C%204.5ms%20%28SLA%20%3C300ms%29-blue.svg)](docs/PERFORMANCE_REPORT.md)
 
 ---
 
@@ -99,7 +99,7 @@ frappe-crm-sqe/
 | 7 | [`docs/TRACEABILITY_MATRIX.md`](docs/TRACEABILITY_MATRIX.md) | Full bidirectional Requirements Traceability Matrix (RTM) | **Completed** |
 | 8 | [`docs/TEST_CASES.md`](docs/TEST_CASES.md) | Detailed test specifications across unit, API, E2E, and security | **Completed** |
 | 9 | [`docs/USE_CASE_SPECIFICATION.md`](docs/USE_CASE_SPECIFICATION.md) | Detailed formal use cases for Lead Conversion and Deal Lifecycle | **Completed** |
-| 10 | [`docs/UNIT_TEST_REPORT.md`](docs/UNIT_TEST_REPORT.md) | 56 tests (100% statement and branch coverage, 10-row MCC, 4 MC/DC pairs) | **Completed** |
+| 10 | [`docs/UNIT_TEST_REPORT.md`](docs/UNIT_TEST_REPORT.md) | 73 tests (100% statement and branch coverage, 10-row MCC, 4 MC/DC pairs, state matrix) | **Completed** |
 | 11 | [`docs/API_TEST_REPORT.md`](docs/API_TEST_REPORT.md) | 24 REST/RPC API tests, 3-point BVA, EP, and cross-workflow integration | **Completed** |
 | 12 | [`docs/DATA_GENERATOR_REPORT.md`](docs/DATA_GENERATOR_REPORT.md) | OpenAPI 3.0 specification (`docs/openapi_crm.yaml`) and synthetic generator | **Completed** |
 | 13 | [`docs/E2E_USE_CASE_REPORT.md`](docs/E2E_USE_CASE_REPORT.md) | 6 Playwright browser scenarios (Happy Path, Alternative, Exception flows) | **Completed** |
@@ -252,7 +252,7 @@ flake8 tests/team --count --select=E9,F63,F7,F82 --show-source --statistics
 
 | Engineering Dimension | Pre-defined Target | Achieved Metric | Evaluation Status |
 | :--- | :--- | :--- | :---: |
-| **Total Test Cases** | $\ge 50$ tests | **94 / 94 Passing** | **PASSED (100%)** |
+| **Total Test Cases** | $\ge 50$ tests | **139 / 139 Passing** | **PASSED (100%)** |
 | **Branch Coverage** | $\ge 80.0\%$ | **100.0%** | **PASSED** |
 | **Statement Coverage**| $\ge 80.0\%$ | **100.0%** | **PASSED** |
 | **Mutation Score** | $\ge 80.0\%$ | **100.0% (16/16 Killed)** | **PASSED** |

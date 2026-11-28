@@ -57,11 +57,11 @@ Deal Screen:
 ```
 
 ### Generated Artifacts
-- **Lead Screen Report (HTML)**: [`docs/lighthouse/lead_screen.report.html`](docs/lighthouse/lead_screen.report.html)
-- **Lead Screen Report (JSON)**: [`docs/lighthouse/lead_screen.report.json`](docs/lighthouse/lead_screen.report.json)
-- **Deal Screen Report (HTML)**: [`docs/lighthouse/deal_screen.report.html`](docs/lighthouse/deal_screen.report.html)
-- **Deal Screen Report (JSON)**: [`docs/lighthouse/deal_screen.report.json`](docs/lighthouse/deal_screen.report.json)
-- **Summary JSON**: [`docs/lighthouse/lighthouse_summary.json`](docs/lighthouse/lighthouse_summary.json)
+- **Lead Screen Report (HTML)**: [`lighthouse/lead_screen.report.html`](lighthouse/lead_screen.report.html)
+- **Lead Screen Report (JSON)**: [`lighthouse/lead_screen.report.json`](lighthouse/lead_screen.report.json)
+- **Deal Screen Report (HTML)**: [`lighthouse/deal_screen.report.html`](lighthouse/deal_screen.report.html)
+- **Deal Screen Report (JSON)**: [`lighthouse/deal_screen.report.json`](lighthouse/deal_screen.report.json)
+- **Summary JSON**: [`lighthouse/lighthouse_summary.json`](lighthouse/lighthouse_summary.json)
 
 ---
 
@@ -83,7 +83,7 @@ $$C = \frac{L_1 + 0.05}{L_2 + 0.05}$$
 
 ## 5. Automated Playwright & Axe Test Suite
 
-The automated verification suite in [`tests/team/a11y/test_accessibility_axe.py`](tests/team/a11y/test_accessibility_axe.py) executes 7 test specifications:
+The automated verification suite in [`tests/team/a11y/test_accessibility_axe.py`](../tests/team/a11y/test_accessibility_axe.py) executes 7 test specifications:
 
 1. `test_accessibility_lead_view`: Verifies zero critical/serious axe-core violations on the primary lead view.
 2. `test_accessibility_convert_lead_modal`: Verifies modal dialog `role="dialog"`, `aria-modal="true"`, and `aria-labelledby` bindings.

@@ -3,7 +3,7 @@
 ## 1. Executive Summary & Configuration
 This report delivers the comprehensive static code analysis, control flow graph (CFG) construction, and cyclomatic complexity evaluation for Frappe CRM's core business logic, adhering to SonarQube quality standards and SQE requirements.
 
-- **Scanner Configuration:** [`sonar-project.properties`](sonar-project.properties)
+- **Scanner Configuration:** [`sonar-project.properties`](../sonar-project.properties)
 - **Target Analysis Files:**
   - `crm/crm/fcrm/doctype/crm_deal/crm_deal.py`
   - `crm/crm/fcrm/doctype/crm_lead/crm_lead.py`
