@@ -289,8 +289,10 @@ class MockCRMHandler(http.server.SimpleHTTPRequestHandler):
                 payload = json.loads(body.decode("utf-8"))
             except Exception:
                 payload = {}
-            deal_name = "CRM-DEAL-2026-00001"
-            res = json.dumps({"message": deal_name})
+            lead_name = payload.get("lead", "CRM-LEAD-2026-00001")
+            import uuid
+            deal_name = f"CRM-DEAL-{uuid.uuid4().hex[:8].upper()}"
+            res = json.dumps({"message": deal_name, "lead": lead_name})
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.send_header("X-Frame-Options", "SAMEORIGIN")

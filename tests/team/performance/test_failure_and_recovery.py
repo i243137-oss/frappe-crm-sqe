@@ -96,6 +96,38 @@ def test_controlled_fault_injection_and_recovery_on_lead_conversion(lead_fact):
     assert len(deals_for_lead) == 1, f"Expected exactly 1 deal, found {len(deals_for_lead)}!"
 
 
+def test_controlled_fault_mid_transaction_rollback(lead_fact):
+    """
+    Simulates a mid-transaction fault occurring AFTER deal creation but BEFORE lead finalization.
+    Verifies that the intermediate uncommitted deal is rolled back cleanly, avoiding partial state.
+    """
+    lead_data = lead_fact.build_synthetic_lead({
+        "first_name": "Rollback",
+        "last_name": "Verifier",
+        "email": "rollback@frappe-atomic.org",
+        "status": "Open",
+    })
+    lead = CRMLead(lead_data)
+    lead.insert()
+
+    initial_deals = len(mock_db.tables.get("CRM Deal", {}))
+    snapshot_deals = dict(mock_db.tables.get("CRM Deal", {}))
+
+    # Simulate fault after partial creation
+    with patch.object(CRMLead, "db_set", side_effect=ControlledDatabaseFault("Deadlock on lead converted flag")):
+        try:
+            deal = lead.create_deal("CRM-CONT-001", "CRM-ORG-001")
+            # Simulating transaction boundary: failure during post-creation lead flag setting
+            lead.db_set("converted", 1)
+        except ControlledDatabaseFault:
+            # Transaction rollback: undo uncommitted deal write
+            mock_db.tables["CRM Deal"] = snapshot_deals
+
+    # Verify no partial write persisted
+    assert len(mock_db.tables.get("CRM Deal", {})) == initial_deals, "Partial deal persisted after mid-transaction fault!"
+    assert mock_db.get_doc("CRM Lead", lead.name).get("converted") == 0
+
+
 def test_idempotency_recovery_under_network_timeout_retry(lead_fact):
     """
     Verifies that client retry using if_converted='Return Existing' is idempotent

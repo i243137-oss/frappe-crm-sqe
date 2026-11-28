@@ -94,7 +94,7 @@ sequenceDiagram
     participant LeadService as CRMLead Controller
     participant DB as Frappe Database Engine
     
-    Note over TestRunner,DB: Phase 1: Fault Injection
+    Note over TestRunner,DB: Milestone 1: Fault Injection
     TestRunner->>LeadService: convert_to_deal("CRM-LEAD-001")
     LeadService->>DB: acquire lock (for_update=True)
     DB-->>LeadService: lock granted
@@ -103,7 +103,7 @@ sequenceDiagram
     LeadService->>DB: Transaction Rollback
     TestRunner->>DB: Verify State: No orphan deal, Lead unconverted (converted=0, status='New')
     
-    Note over TestRunner,DB: Phase 2: Dependency Recovery & Retry
+    Note over TestRunner,DB: Milestone 2: Dependency Recovery & Retry
     TestRunner->>LeadService: convert_to_deal("CRM-LEAD-001") (Retry)
     LeadService->>DB: insert CRM Deal
     LeadService->>DB: update CRM Lead (converted=1, status='Qualified')

@@ -3,7 +3,6 @@
 ## 1. Executive Summary & Configuration
 This report delivers the comprehensive static code analysis, control flow graph (CFG) construction, and cyclomatic complexity evaluation for Frappe CRM's core business logic, adhering to SonarQube quality standards and SQE requirements.
 
-- **SonarQube Installation Path:** `E:\sonarqube-26.9.0.129388\sonarqube-26.9.0.129388`
 - **Scanner Configuration:** [`sonar-project.properties`](sonar-project.properties)
 - **Target Analysis Files:**
   - `crm/crm/fcrm/doctype/crm_deal/crm_deal.py`
@@ -45,7 +44,7 @@ In accordance with course requirements (*"Report the relevant metrics (complexit
 | **3. Code Smells** | **0 Critical / 3 Minor** | **Grade A** | Non-breaking maintainability issues. Minor smells involve legacy type annotations (`DF.Currency | None`). Zero critical maintainability smells exist in business logic. |
 | **4. Bugs (Reliability)** | **0 Bugs** | **Grade A (Rating 1.0)** | Static analysis faults that will demonstrably cause runtime errors. Zero static bugs detected across `crm_deal.py`, `crm_lead.py`, and test fixtures. |
 | **5. Vulnerabilities (Security)** | **0 Vulnerabilities** | **Grade A (Rating 1.0)** | Security weaknesses susceptible to malicious exploitation (SQL injection, XSS, insecure deserialization). All database queries use parameterized ORM builders. |
-| **6. Code Coverage** | **100% on Business Units** | **Grade A** | Proportion of executable statements exercised by automated tests. 100% statement and branch coverage on core conversion and status update workflows. |
+| **6. Code Coverage** | **70% Overall / 100% Core** | **Grade A** | 70% branch and statement coverage across full upstream DocTypes (`crm_deal.py` 65%, `crm_lead.py` 74%), with 100% statement and branch coverage on targeted business functions (`convert_to_deal`, `validate_lost_reason`, `update_closed_date`, `update_default_probability`). |
 | **7. Technical Debt** | **15 minutes** | **Grade A** | Estimated remediation effort required to eliminate all identified code smells. 15 minutes indicates near-zero technical debt and high long-term maintainability. |
 | **8. Overall Quality Gate Rating** | **PASSED (Clean Green)** | **Grade A** | Holistic quality evaluation. All 8 SonarQube quality gate conditions satisfied with zero blocking issues. |
 

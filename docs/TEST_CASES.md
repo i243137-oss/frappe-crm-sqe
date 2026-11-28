@@ -2,7 +2,7 @@
 **System Under Test:** Frappe CRM  
 **Target Module:** Leads and Deals  
 **Document Reference:** `docs/TEST_CASES.md`  
-**Phase:** Phase 2 Deliverable  
+**Milestone:** Milestone 2 Deliverable  
 
 ---
 
@@ -19,7 +19,7 @@ Every test case follows the IEEE 829 / ISO 29119 specification format:
 
 ---
 
-## 2. White-Box Unit Test Cases (Phase 4)
+## 2. White-Box Unit Test Cases (Milestone 4)
 
 ### 2.1 Lead Conversion Unit Tests
 * **TC-UNIT-LC-01: Valid Lead Conversion & Field Mapping**
@@ -88,7 +88,7 @@ Every test case follows the IEEE 829 / ISO 29119 specification format:
 
 ---
 
-## 3. API & Integration Test Cases (Phase 5)
+## 3. API & Integration Test Cases (Milestone 5)
 
 ### 3.1 Lead Conversion API Endpoints
 * **TC-API-LC-01: Valid Lead Conversion via RPC**
@@ -126,7 +126,7 @@ Every test case follows the IEEE 829 / ISO 29119 specification format:
 
 ---
 
-## 4. Playwright End-to-End Test Cases (Phase 7)
+## 4. Playwright End-to-End Test Cases (Milestone 7)
 
 ### 4.1 Use Case 1: Convert Lead to Deal
 * **TC-E2E-LC-01 (Happy Path):**
@@ -184,7 +184,7 @@ Every test case follows the IEEE 829 / ISO 29119 specification format:
 
 ---
 
-## 5. Defensive Security & RBAC Test Cases (Phase 11)
+## 5. Defensive Security & RBAC Test Cases (Milestone 11)
 
 * **TC-SEC-01 (Sales Manager Global Access):**
   * Authenticate as `Sales Manager`. Access deal owned by another user.
@@ -200,7 +200,7 @@ Every test case follows the IEEE 829 / ISO 29119 specification format:
 
 ---
 
-## 6. Performance & Fault Recovery Test Cases (Phase 12)
+## 6. Performance & Fault Recovery Test Cases (Milestone 12)
 
 * **TC-PERF-01 (k6 Baseline 1 VU):**
   * Execute `POST /api/method/crm.fcrm.doctype.crm_lead.crm_lead.convert_to_deal` for 60 seconds with 1 virtual user.

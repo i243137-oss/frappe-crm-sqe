@@ -98,7 +98,7 @@ flowchart LR
 
     subgraph Testing["Test Strategy"]
         T1["Single-threaded unit tests missed timing races"]
-        T2["Load tests not run during unit phase"]
+        T2["Load tests not run during unit milestone"]
     end
 
     A1 --> RaceDefect["DEF-02: Concurrent Double-Conversion Race"]

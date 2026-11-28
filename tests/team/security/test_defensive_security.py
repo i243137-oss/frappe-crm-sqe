@@ -317,10 +317,33 @@ def test_dependency_security_audit_manifests():
     Verifies that project dependencies avoid high-severity known vulnerabilities.
     Audits:
     - requirements.txt (pinned safe versions of requests, pytest, playwright)
-    - crm/package.json
+    - crm/pyproject.toml (upstream Frappe CRM package metadata)
+    - Executes real pip-audit when available to ensure 0 known CVE vulnerabilities.
     """
+    import subprocess
+    import shutil
+
     req_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "requirements.txt")
-    assert os.path.exists(req_path)
+    crm_pyproject = os.path.join(os.path.dirname(__file__), "..", "..", "..", "crm", "pyproject.toml")
+    assert os.path.exists(req_path), "requirements.txt must exist"
+
+    # Upstream manifest check
+    if os.path.exists(crm_pyproject):
+        with open(crm_pyproject, "r", encoding="utf-8") as f:
+            crm_content = f.read()
+            assert "frappe" in crm_content or "crm" in crm_content
+
+    # If pip-audit is available in environment, execute live audit
+    pip_audit_bin = shutil.which("pip-audit")
+    if pip_audit_bin:
+        result = subprocess.run(
+            [pip_audit_bin, "-r", req_path],
+            capture_output=True,
+            text=True,
+        )
+        combined_output = (result.stdout or "") + "\n" + (result.stderr or "")
+        assert result.returncode == 0, f"pip-audit discovered vulnerable dependencies: {combined_output}"
+        assert "No known vulnerabilities found" in combined_output or "0 vulnerabilities" in combined_output
 
     with open(req_path, "r", encoding="utf-8") as f:
         deps = [line.strip() for line in f if line.strip() and not line.startswith("#")]

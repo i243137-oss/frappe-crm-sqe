@@ -13,11 +13,12 @@ This report documents the execution and outcomes of the **White-Box Unit Testing
 
 | Metric | Measured Value | Standard Target | Status |
 | :--- | :---: | :---: | :---: |
-| **Total Unit Tests Executed** | **56** | $\ge 30$ | **MET** |
-| **Tests Passed** | **56** | 100% | **MET** |
+| **Total Unit Tests Executed** | **73** | $\ge 30$ | **MET** |
+| **Tests Passed** | **73** | 100% | **MET** |
 | **Tests Failed** | **0** | 0 | **MET** |
-| **Execution Duration** | **0.27 seconds** | $< 10.0$s | **MET** |
-| **Server-Side Business Logic Coverage** | **100% Statement / 100% Branch** | 100% | **MET** |
+| **Execution Duration** | **1.56 seconds** | $< 10.0$s | **MET** |
+| **Server-Side Target Functions Coverage** | **100% Statement / 100% Branch** | 100% | **MET** |
+| **Full Upstream DocType Module Coverage** | **70% Overall (65% Deal, 74% Lead)** | $\ge 60\%$ | **MET** |
 | **MCC Coverage on BR-02 Decision** | **10 / 10 rows (100%)** | 100% | **MET** |
 | **MC/DC Condition Pairs Verified** | **4 / 4 pairs (100%)** | 100% | **MET** |
 | **Business Rules Formally Covered** | **4 / 4 (BR-01, BR-02, BR-03, BR-04)** | 4 | **MET** |

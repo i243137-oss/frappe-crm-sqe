@@ -2,7 +2,7 @@
 **System Under Test:** Frappe CRM  
 **Target Module:** Leads and Deals  
 **Document Reference:** `docs/USER_ROLES.md`  
-**Phase:** Phase 2 Deliverable  
+**Milestone:** Milestone 2 Deliverable  
 
 ---
 
@@ -12,7 +12,7 @@ This document specifies the Role-Based Access Control (RBAC) model implemented i
 1. **`Sales Manager`**
 2. **`Sales User`**
 
-It details the permission matrices, security enforcement hooks in Python, and authorization boundaries that will be systematically validated in Unit, API, Playwright, and Defensive Security test phases.
+It details the permission matrices, security enforcement hooks in Python, and authorization boundaries that will be systematically validated in Unit, API, Playwright, and Defensive Security test Milestones.
 
 ---
 
@@ -112,7 +112,7 @@ For single-record API calls and conversions (`convert_to_deal`, `frappe.client.s
 
 ## 5. Security & Test Scenarios
 
-The following specific test scenarios will be implemented in subsequent phases:
+The following specific test scenarios will be implemented in subsequent Milestones:
 1. **SC-AU-01:** `Sales Manager` converts any valid Lead to a Deal successfully.
 2. **SC-AU-02:** `Sales User` converts a self-owned Lead to a Deal successfully.
 3. **SC-AU-03:** `Sales User` attempts to convert another representative's unassigned Lead -> Strictly blocked with `frappe.PermissionError`.
