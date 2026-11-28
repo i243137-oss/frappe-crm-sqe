@@ -41,7 +41,7 @@ This report documents all defects discovered, logged, triaged, remediated, and v
 ## 3. Detailed Defect Dossiers
 
 ### 3.1 Defect 1: WCAG 2.1 AA Color Contrast Failure (`DEF-01`)
-* **GitHub Issue:** #101 – *axe-core: Elements must have sufficient color contrast on status actions*
+* **GitHub Issue:** [#12](https://github.com/i243137-oss/frappe-crm-sqe/issues/12) – *DEF-01: WCAG 2.1 AA Inadequate Color Contrast on Mark Won Button & Status Toast*
 * **Severity:** Major | **Priority:** P2 | **Status:** Closed | **Reporter:** Automated axe-core Scanner
 * **Affected Component:** `tests/team/e2e/mock_server.py:32`, `Deal.vue`
 * **Linked Risk:** `RSK-07` (Non-Functional Accessibility Violations)
@@ -66,7 +66,7 @@ This report documents all defects discovered, logged, triaged, remediated, and v
 ---
 
 ### 3.2 Defect 2: Concurrent Lead Conversion Race Condition (`DEF-02`)
-* **GitHub Issue:** #102 – *Pessimistic row locking missing on lead conversion creates duplicate deals*
+* **GitHub Issue:** [#13](https://github.com/i243137-oss/frappe-crm-sqe/issues/13) – *DEF-02: Concurrent Double-Conversion Race Condition Leading to Duplicate Deals*
 * **Severity:** Critical | **Priority:** P1 | **Status:** Closed | **Reporter:** Concurrency Audit Team
 * **Affected Component:** `crm/crm/fcrm/doctype/crm_lead/crm_lead.py:548-577`
 * **Linked Risk:** `RSK-01` (Concurrent Double Conversion)
@@ -88,7 +88,7 @@ This report documents all defects discovered, logged, triaged, remediated, and v
 ---
 
 ### 3.3 Defect 3: CI Upstream Module Import Resolution Failure (`DEF-03`)
-* **GitHub Issue:** #103 – *GitHub Actions runner fails to resolve crm module in clean environment*
+* **GitHub Issue:** [#14](https://github.com/i243137-oss/frappe-crm-sqe/issues/14) – *DEF-03: CI Runner Upstream Module Import Resolution Failure (ModuleNotFoundError)*
 * **Severity:** Major | **Priority:** P1 | **Status:** Closed | **Reporter:** CI Quality Gate Automation
 * **Affected Component:** `.github/workflows/sqe_quality_gate.yml`
 * **Linked Risk:** `PRJ-01` (CI Ephemeral Runner Drift)
@@ -105,12 +105,12 @@ This report documents all defects discovered, logged, triaged, remediated, and v
 
 #### Remediation & Verification:
 * **Fix Applied:** Configured automated shallow clone `git clone --depth 50 https://github.com/frappe/crm crm` in CI pipeline and generated explicit `requirements.txt`.
-* **Verification Evidence:** GitHub Actions Run ID `45001528723` passed all 10 stages cleanly.
+* **Verification Evidence:** GitHub Actions Run ID `45001528723` passed all stages cleanly.
 
 ---
 
 ### 3.4 Defect 4: Deal Lost State Validation Bypass via Programmatic RPC (`DEF-04`)
-* **GitHub Issue:** #104 – *Direct set_value call allows deal transition to Lost without reason*
+* **GitHub Issue:** [#15](https://github.com/i243137-oss/frappe-crm-sqe/issues/15) – *DEF-04: Deal Lost State Transition Validation Bypass via Programmatic RPC Updates*
 * **Severity:** Major | **Priority:** P2 | **Status:** Closed | **Reporter:** API Testing Team
 * **Affected Component:** `crm/crm/fcrm/doctype/crm_deal/crm_deal.py:93-110`
 * **Linked Risk:** `RSK-04` (Invalid State Transition to Lost)

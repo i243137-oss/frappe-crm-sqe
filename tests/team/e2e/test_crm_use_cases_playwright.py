@@ -135,8 +135,9 @@ def test_e2e_exception_flow_convert_lost_lead_rejected(page):
     Exception Flow 1:
     Attempting to convert a Lead marked as Lost must be rejected with error toast.
     """
-    # Simulate a lost lead by altering DOM status
-    page.evaluate("() => { document.getElementById('lead-status').innerText = 'Lost'; }")
+    # Navigate to/select a Lost lead record in UI
+    page.select_option("#select-active-lead", "lost")
+    expect(page.locator("#lead-status")).to_contain_text("Lost")
 
     page.click("#btn-convert-deal")
     expect(page.locator("#modal-convert")).not_to_be_visible()

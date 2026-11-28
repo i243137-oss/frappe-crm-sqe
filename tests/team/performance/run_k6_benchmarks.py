@@ -21,7 +21,9 @@ import time
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))
 from tests.team.e2e.mock_server import MockCRMHandler, ReusableTCPServer, PORT
 
-K6_EXE = r"C:\Program Files\k6\k6.exe"
+import shutil
+
+K6_EXE = shutil.which("k6") or r"C:\Program Files\k6\k6.exe" or "k6"
 SCRIPT_PATH = os.path.join(os.path.dirname(__file__), "k6_lead_conversion.js")
 DOCS_PERF_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "docs", "performance")
 
